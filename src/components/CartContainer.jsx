@@ -7,6 +7,7 @@ const CartContainer = () => {
   
   return (
     <div className=' w-auto h-auto  mx-8 mt-10 py-4 px-4'>
+      <button className="bg-black text-white w-10 rounded-md cursor-pointer" onClick={()=>history.back()}>Back</button>
       <h2 className='text-2xl text-center mb-10'>Items in Your Cart </h2>
       <div className="flex flex-row"><span className="mx-20 text-xl">Item</span><span className="ml-75 text-xl">Price</span><span className="ml-25 text-xl">Quantity</span> <span className="mx-20 text-xl">Total</span>
       </div>

@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import cartItemSlice from './cartItems';
 import productListSlice from './productList'
 import wishListSlice from './wishtList'
+import authSlice from "./auth";
 // import { api } from "../middlewares/api";
 // import {logger} from "../middlewares/logger"
 
@@ -9,7 +10,8 @@ const store = configureStore({
     reducer:{
         productList:productListSlice.reducer,
         cartItems:cartItemSlice.reducer,
-        wishList:wishListSlice.reducer
+        wishList:wishListSlice.reducer,
+        auth:authSlice.reducer
         
 
     },

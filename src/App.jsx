@@ -1,6 +1,7 @@
 import NavBar from "./components/NavBar"
 import CardContainer from "./components/CardContainer"
 import { Outlet } from "react-router-dom"
+import Footer from "./components/Footer"
 function App() {
   
 
@@ -8,6 +9,7 @@ function App() {
     <>
       <NavBar></NavBar>
       <Outlet/>
+      <Footer/>
     </>
   )
 }

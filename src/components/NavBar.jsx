@@ -49,7 +49,7 @@ const NavBar = () => {
         <ul className="pr-7 pt-2">
             <li className="flex flex-col gap-0" >
               <span className="relative pl-1">{cartItems.reduce((accumulator,currentValue)=> accumulator+currentValue.quantity,0)}</span>
-              <Link to="/carts"><FaCartShopping size={20} className="cursor-pointer" /></Link>
+              <Link to="/api/carts"><FaCartShopping size={20} className="cursor-pointer" /></Link>
               
               </li>
             

@@ -59,29 +59,29 @@ const cartItemSlice = createSlice({
             if(state[existingCartIndex(state,action)].quantity == 1){
                 state.list.splice(existingCartIndex(state.list,action),1)
             }else{
-                state.list[existingCartIndex(state.list,action)].quantity -=1;
+                state.list[existingCartIndex(state.list,action)].quantity -= 1;
             }       
         },
         removeItem:(state,action)=>{
             state.list.splice(existingCartIndex(state.list,action),1);
         }
     },
-    extraReducers:(builder)=>{
-        builder.
-        addCase(fetchCartItemsData.pending,(state)=>{
-            state.loading = true
-        })
-        .addCase(fetchCartItemsData.fulfilled,(state,action)=>{
-            state.loading = false;
-            state.error='';
-            console.log(action.payload.products)
-            state.list = action.payload.products
-        })
-        .addCase(fetchCartItemsData.rejected,(state,action)=>{
-            state.loading= false;
-            state.error = action.payload || "Something went wrong"
-        })
-    }
+    // extraReducers:(builder)=>{
+    //     builder.
+    //     addCase(fetchCartItemsData.pending,(state)=>{
+    //         state.loading = true
+    //     })
+    //     .addCase(fetchCartItemsData.fulfilled,(state,action)=>{
+    //         state.loading = false;
+    //         state.error='';
+    //         console.log(action.payload.products)
+    //         state.list = action.payload.products
+    //     })
+    //     .addCase(fetchCartItemsData.rejected,(state,action)=>{
+    //         state.loading= false;
+    //         state.error = action.payload || "Something went wrong"
+    //     })
+    // }
 })
 export const cartItemAction  = cartItemSlice.actions
 
