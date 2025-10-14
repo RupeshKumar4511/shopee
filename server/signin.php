@@ -1,11 +1,15 @@
 <?php
 header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Credentials: true");
 
 
 include('./connection.php');
-if (isset($_POST['username']) && isset($_POST['password'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+$input = json_decode(file_get_contents("php://input"), true);
+if (isset($input['username']) && isset($input['password'])) {
+    $username = $input['username'];
+    $password = $input['password'];
 
     // SQL query to select the record
     $sql = "SELECT * FROM `users` WHERE `Username` = ? AND `Password` = ?";

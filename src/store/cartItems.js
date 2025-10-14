@@ -53,13 +53,17 @@ const cartItemSlice = createSlice({
             
         },
         increaseQuantity:(state,action)=>{
-            state.list[existingCartIndex(state.list,action)].quantity +=1;
+            if(state.list[existingCartIndex(state.list,action)].quantity < 5){
+                state.list[existingCartIndex(state.list,action)].quantity +=1;
+            }
         },
         decreaseQuantity:(state,action)=>{
-            if(state[existingCartIndex(state,action)].quantity == 1){
+            console.log("decrease")
+            if(state.list[existingCartIndex(state.list,action)].quantity <= 1){
                 state.list.splice(existingCartIndex(state.list,action),1)
             }else{
-                state.list[existingCartIndex(state.list,action)].quantity -= 1;
+               state.list[existingCartIndex(state.list,action)].quantity -=1
+                
             }       
         },
         removeItem:(state,action)=>{

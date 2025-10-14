@@ -1,7 +1,11 @@
 <?php
 
 header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Credentials: true");
 
+include('./connection.php');
 
 //Import PHPMailer classes into the global namespace
 //These must be at the top of your script, not inside a function
@@ -17,10 +21,9 @@ require './phpMailer/src/SMTP.php';
 require __DIR__ . "/vendor/autoload.php";
 
 // Initialize Dotenv and load the .env file
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ ); 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ .'/'); 
 
 
-session_start();
 
 $dotenv->load();
 $UserName = $_ENV['username'];
@@ -31,10 +34,13 @@ function sendOTP() {
     return rand(1000, 9999);
     
 }
-$_SESSION['otp_value'] = sendOTP();
 
-if (isset($_POST['email'])) {
+$OTP_value = sendOTP();
 
+$input = json_decode(file_get_contents("php://input"), true);
+if (isset($input['email'])) {
+
+$email = $input['email'];
 //Create an instance; passing `true` enables exceptions
 
 $mail = new PHPMailer(true);
@@ -51,10 +57,10 @@ try {
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable explicit TLS encryption
     $mail->Port       = 587;                                    //TCP port to connect to; use 587 for TLS
 
-    $gmail = $_POST['email'];
+    
     //Recipients
     $mail->setFrom("herosaini67@gmail.com", 'TechUpdate');
-    $mail->addAddress($gmail, 'Hello Sir/Madam');     // Add a recipient
+    $mail->addAddress($email, 'Hello Sir/Madam');     // Add a recipient
     
    
 
@@ -64,7 +70,26 @@ try {
     $mail->Subject = 'Welcome to Shopee';
     $mail->Body    = 'Your otp is '.$_SESSION['otp_value'];
     if ($mail->send()) {
-        echo json_encode(["success" => true, "message" => "OTP sent successfully"]);
+        
+        try{
+             // SQL query to insert data
+            $sql = "INSERT INTO `OTP` (`Email`, `OTP_value` ) VALUES ('$email','$OTP_value');";
+
+            // Execute query
+            if (mysqli_query($connection, $sql)) {
+                echo json_encode(["success" => true, "message" => "OTP sent successfully"]);
+            } else {
+                http_response_code(400); // Set HTTP status to 400 for client error
+                echo json_encode(["success"=>false,"error" => "something went wrong"]);
+                exit();
+            }
+
+        // Close the connection
+        mysqli_close($connection);
+        }catch(Exception $e){
+            http_response_code(500);
+            echo json_encode(["success" => false, "error" => "Otp value is saved : " . $e->getMessage()]);
+        }
     } else {
         http_response_code(500);
         echo json_encode(["success" => false, "error" => "Message could not be sent: " . $mail->ErrorInfo]);

@@ -37,6 +37,8 @@ export default function VerifyUser() {
     }, [time])
 
         const onSubmit = (data) => {
+        console.log(data.otp)
+        console.log(state);
         dispatch(signUp({ otp: data.otp, ...state }))
     }
 

@@ -1,46 +1,61 @@
-/* eslint-disable no-useless-catch */
 import {  createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 
 export const sendOTP = createAsyncThunk(
     'auth/send-otp' // action types
-    ,async()=>{
+    ,async(userData,thunkAPI)=>{
     try{
         const response = await fetch('http://localhost/shopee/server/mail.php',{
             method:'POST',
+            headers: { "Content-Type": 'application/json' },
+            body: JSON.stringify(userData)
         })
-        return response.json()
-    }catch(error){
-        throw error;
+       const data = await response.json()
+        if (!response.ok) {
+            return thunkAPI.rejectWithValue(data.message || "failed to send email");
+        }
+        return data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
     }
-
 })
 export const signUp = createAsyncThunk(
     'auth/sign-up' // action types
-    ,async()=>{
+    ,async(userData,thunkAPI)=>{
     try{
         const response = await fetch('http://localhost/shopee/server/signup.php',{
-            method:'POST'
+            method:'POST',
+            headers: { "Content-Type": 'application/json' },
+            body: JSON.stringify(userData),
+            
         })
-        return response.json()
-    }catch(error){
-        throw error;
+        const data = await response.json()
+        if (!response.ok) {
+            return thunkAPI.rejectWithValue(data.message || "failed to send email");
+        }
+        return data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
     }
-
 })
 
 export const signIn = createAsyncThunk(
     'auth/sign-in' // action types
-    ,async()=>{
+    ,async(userData,thunkAPI)=>{
     try{
         const response = await fetch('http://localhost/shopee/server/signin.php',{
-            method:'POST'
+            method:'POST',
+           headers: { "Content-Type": 'application/json' },
+            body: JSON.stringify(userData)
         })
-        return response.json()
-    }catch(error){
-        throw error;
+        const data = await response.json()
+        if (!response.ok) {
+            return thunkAPI.rejectWithValue(data.message || "failed to send email");
+        }
+        return data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
     }
-
 })
 
 
@@ -74,7 +89,7 @@ const authSlice = createSlice({
         })
         .addCase(signUp.rejected,(state,action)=>{
             state.loading= false;
-            state.error = action.payload || "Something went wrong"
+            state.error = action.payload || action.error.message || "Something went wrong.";
         }).
         addCase(signIn.pending,(state)=>{
             state.loading = true
@@ -86,7 +101,7 @@ const authSlice = createSlice({
         })
         .addCase(signIn.rejected,(state,action)=>{
             state.loading= false;
-            state.error.signInError = action.payload || "Something went wrong"
+            state.error.signInError = action.payload || action.error.message || "Something went wrong.";
         }).
         addCase(sendOTP.pending,(state)=>{
             state.loading = true
@@ -98,7 +113,7 @@ const authSlice = createSlice({
         })
         .addCase(sendOTP.rejected,(state,action)=>{
             state.loading= false;
-            state.error.sendOTPError = action.payload || "Something went wrong"
+            state.error.sendOTPError = action.payload || action.error.message || "Something went wrong.";
         })
     }
 })
