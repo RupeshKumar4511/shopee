@@ -65,9 +65,9 @@ const authSlice = createSlice({
     initialState:{
         loading:false,
         response:{
-            signUpResponse:'',
-            signInResponse:'',
-            sendOTPResponse:''
+            signUpResponse:{},
+            signInResponse:{},
+            sendOTPResponse:{}
 
         },
         error:{
@@ -85,11 +85,11 @@ const authSlice = createSlice({
         .addCase(signUp.fulfilled,(state,action)=>{
             state.loading = false;
             state.error.signUpError='';
-            state.signUpResponse = action.payload;
+            state.response.signUpResponse = action.payload;
         })
         .addCase(signUp.rejected,(state,action)=>{
             state.loading= false;
-            state.error = action.payload || action.error.message || "Something went wrong.";
+            state.error.signUpError = action.payload || action.error.message || "Something went wrong.";
         }).
         addCase(signIn.pending,(state)=>{
             state.loading = true
@@ -97,7 +97,7 @@ const authSlice = createSlice({
         .addCase(signIn.fulfilled,(state,action)=>{
             state.loading = false;
             state.error.signUpError='';
-            state.response.signUpResponse = action.payload;
+            state.response.signInResponse = action.payload;
         })
         .addCase(signIn.rejected,(state,action)=>{
             state.loading= false;

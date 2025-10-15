@@ -16,6 +16,6 @@ $connection = mysqli_connect($server,$user,$password,$database,$portno);
 if(!$connection){
     echo "Something went wrong";
 }else{
-    echo "Successfully connected";
+    // echo "Successfully connected";
 }
 ?>

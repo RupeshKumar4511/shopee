@@ -1,9 +1,12 @@
 import { useRef } from "react";
 import { useForm } from 'react-hook-form';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signIn } from "../store/auth";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   const { handleSubmit, register, reset, formState: { errors } } = useForm();
+  const navigate = useNavigate();
+  const { response, isLoading, error } = useSelector(store => store.auth);
   const formRef = useRef(null);
   const dispatch = useDispatch()
   const onSubmit = (data) => {
@@ -16,6 +19,32 @@ const Login = () => {
     })
 
   }
+
+
+  if (isLoading) {
+        return <LoadingSpinner />
+    }
+
+    if (response.signInResponse.success === true) {
+        setTimeout(()=>{
+          navigate('/api');
+        },0)
+        
+
+    }
+
+    if (response.signInResponse.success === false) {
+        return (
+            <h1 className='text-center'>{response.message}</h1>
+        )
+    }
+
+    if (error.signInError) {
+        return (
+            <h1 className='text-center'>{error.signInError}</h1>
+        )
+    }
+
   return (
     <div className="w-full flex">
       <form

@@ -37,8 +37,6 @@ export default function VerifyUser() {
     }, [time])
 
         const onSubmit = (data) => {
-        console.log(data.otp)
-        console.log(state);
         dispatch(signUp({ otp: data.otp, ...state }))
     }
 
@@ -48,10 +46,11 @@ export default function VerifyUser() {
     }
 
     if (response.signUpResponse.success === true) {
+        console.log(response.signUpResponse)
         alert("Success! Please log in.");
         setTimeout(()=>{
           navigate('/signin');
-        })
+        },0)
         
 
     }

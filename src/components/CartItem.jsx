@@ -25,7 +25,8 @@ const CartItem = ({id,title,price,rating,image}) => {
 
         <button onClick={()=> {dispatch(cartItemAction.removeItem({productId:id}))}} ><MdDelete className="cursor-pointer"  size={30}/></button>
 
-      
+        <button className="ml-5 py-2 px-4 bg-blue-600 rounded-md text-white" onClick={()=> {console.log("Buy Now")}}>Buy Now</button>
+
       </div>
   )
 }

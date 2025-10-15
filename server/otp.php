@@ -4,18 +4,20 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Content-Type: application/json; charset=UTF-8");
 
+include('./connection.php');
 
 try {
     $input = json_decode(file_get_contents("php://input"), true);
     if (isset($input['otp'])) {
         $otp = $input['otp'];
+        $email = $input['email'];
         
     // SQL query to select the record
-    $sql = "SELECT * FROM `OTP` WHERE `Email` = ?";
-    
+    $sql = "SELECT * FROM `OTP` WHERE `Email` = ? ORDER BY SNo DESC limit 1";
+    $sql2 = "DELETE FROM `OTP` WHERE `Email` = '$email' ";
     // Prepare and bind parameters
     if ($stmt = mysqli_prepare($connection, $sql)) {
-        mysqli_stmt_bind_param($stmt, "s", $otp);
+        mysqli_stmt_bind_param($stmt, "s", $email);
         // Here ss means both string
 
         // Execute the prepared statement
@@ -26,8 +28,7 @@ try {
         if (mysqli_num_rows($result) > 0 ) {
              // Verify the OTP
             if ($otp == $result->fetch_assoc()['OTP_value']) {
-                echo json_encode(["success"=>true,"message" => "OTP verified successfully."]);
-                
+                mysqli_query($connection, $sql2);
             } else {
                 http_response_code(400); // Set HTTP status to 400 for client error
                 echo json_encode(["success"=>false,"error" => "Incorrect OTP"]);
@@ -46,8 +47,7 @@ try {
         echo json_encode(["error" => "Message could not be processed: " . $e->getMessage()]);
     }
 
-    // Close the connection
-    mysqli_close($connection);
+   
 
        
     }

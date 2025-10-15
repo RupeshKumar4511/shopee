@@ -24,7 +24,6 @@ require __DIR__ . "/vendor/autoload.php";
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ .'/'); 
 
 
-
 $dotenv->load();
 $UserName = $_ENV['username'];
 $Password = $_ENV['password'];
@@ -68,7 +67,7 @@ try {
     //Content
     $mail->isHTML(true);                                  // Set email format to HTML
     $mail->Subject = 'Welcome to Shopee';
-    $mail->Body    = 'Your otp is '.$_SESSION['otp_value'];
+    $mail->Body    = 'Your otp is '.$OTP_value ;
     if ($mail->send()) {
         
         try{
@@ -84,8 +83,6 @@ try {
                 exit();
             }
 
-        // Close the connection
-        mysqli_close($connection);
         }catch(Exception $e){
             http_response_code(500);
             echo json_encode(["success" => false, "error" => "Otp value is saved : " . $e->getMessage()]);
