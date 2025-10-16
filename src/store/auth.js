@@ -58,29 +58,54 @@ export const signIn = createAsyncThunk(
     }
 })
 
+export const signOut = createAsyncThunk(
+    'auth/sign-out' // action types
+    ,async(userData,thunkAPI)=>{
+    try{
+        const response = await fetch('http://localhost/shopee/server/signout.php',{
+            method:'POST',
+           headers: { "Content-Type": 'application/json' },
+            body: JSON.stringify(userData)
+        })
+        const data = await response.json()
+        if (!response.ok) {
+            return thunkAPI.rejectWithValue(data.message || "failed to send email");
+        }
+        return data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+    }
+})
 
-
+let authResponse ="";
+if(localStorage.getItem("user")){
+     authResponse = localStorage.getItem("user")
+}else{
+    authResponse = {};
+}
 const authSlice = createSlice({
     name:'auth',
     initialState:{
         loading:false,
         response:{
             signUpResponse:{},
-            signInResponse:{},
-            sendOTPResponse:{}
+            signInResponse:authResponse,
+            sendOTPResponse:{},
+            signOutResponse:{}
 
         },
         error:{
             signUpError : '',
             signInError : '',
-            sendOTPError : ''
+            sendOTPError : '',
+            signOutError: ''
         }
     },
 
     extraReducers:(builder)=>{
         builder.
         addCase(signUp.pending,(state)=>{
-            state.loading = true
+            state.loading = true;
         })
         .addCase(signUp.fulfilled,(state,action)=>{
             state.loading = false;
@@ -97,6 +122,7 @@ const authSlice = createSlice({
         .addCase(signIn.fulfilled,(state,action)=>{
             state.loading = false;
             state.error.signUpError='';
+            localStorage.setItem('user',JSON.stringify(action.payload))
             state.response.signInResponse = action.payload;
         })
         .addCase(signIn.rejected,(state,action)=>{
@@ -114,6 +140,19 @@ const authSlice = createSlice({
         .addCase(sendOTP.rejected,(state,action)=>{
             state.loading= false;
             state.error.sendOTPError = action.payload || action.error.message || "Something went wrong.";
+        }).
+        addCase(signOut.pending,(state)=>{
+            state.loading = true
+        })
+        .addCase(signOut.fulfilled,(state,action)=>{
+            state.loading = false;
+            state.error.signUpError='';
+            localStorage.removeItem('user')
+            state.response.signOutResponse = action.payload;
+        })
+        .addCase(signOut.rejected,(state,action)=>{
+            state.loading= false;
+            state.error.signOutError = action.payload || action.error.message || "Something went wrong.";
         })
     }
 })

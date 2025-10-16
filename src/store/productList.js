@@ -14,6 +14,18 @@ export const fetchProductsData = createAsyncThunk(
 
 })
 
+export const fetchSearchedProduct = createAsyncThunk(
+    'productList/fetchSearchedProducts' // action types
+    ,async(data)=>{
+    try{
+        const response = await fetch(`https://fakestoreapi.com/products/${data}`)
+        return response.json()
+    }catch(error){
+        throw error;
+    }
+
+})
+
 const productListSlice = createSlice({
     name:'productList',
     initialState:{
@@ -52,6 +64,18 @@ const productListSlice = createSlice({
                 state.list = action.payload
             })
             .addCase(fetchProductsData.rejected,(state,action)=>{
+                state.loading= false;
+                state.error = action.payload || "Something went wrong"
+            }).
+            addCase(fetchSearchedProduct.pending,(state)=>{
+                state.loading = true
+            })
+            .addCase(fetchSearchedProduct.fulfilled,(state,action)=>{
+                state.loading = false;
+                state.error='';
+                state.list = action.payload
+            })
+            .addCase(fetchSearchedProduct.rejected,(state,action)=>{
                 state.loading= false;
                 state.error = action.payload || "Something went wrong"
             })
