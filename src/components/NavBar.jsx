@@ -23,6 +23,12 @@ const NavBar = () => {
     setSearchData(event.target.value);
   }
 
+  function getUserName(){
+    const user = JSON.parse(localStorage.getItem("user"));
+    console.log(user)
+    return user.username;
+  }
+
   
 
   useEffect(()=>{
@@ -63,7 +69,7 @@ const NavBar = () => {
     <nav className='flex justify-between px-8 py-4 shadow-md'>
         <h1 className='text-2xl font-bold'>Shopee</h1>
         <div className="text-xl">Search : <input type="text" className="border-1  rounded-md px-2 py-1" onKeyDown={(event)=>handleSearch(event)} onChange={(event)=>handleChange(event)}/></div>
-        <div className="text-xl">Welcome {}</div>
+        <div className="text-xl">Welcome {getUserName()}</div>
         <ul className="pr-7 pt-2 flex">
           <li><Link to="/api/orders" className="text-blue-700 relative top-3 right-3">Your Orders </Link></li>
             <li className="flex flex-col gap-0" >

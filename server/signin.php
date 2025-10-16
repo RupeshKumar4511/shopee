@@ -25,7 +25,7 @@ if (isset($input['username']) && isset($input['password'])) {
         // Get the result and check if there’s a match
         $result = mysqli_stmt_get_result($stmt);
         if (mysqli_num_rows($result) > 0 ) {
-            echo json_encode(["success"=>true,"message" => "Sign In successfully."]);
+            echo json_encode(["success"=>true,"message" => "Sign In successfully.","username"=>$username]);
         } else {
             http_response_code(400); // Set HTTP status to 400 for client error
             echo json_encode(["error" => "Incorrect Username or Password"]);
