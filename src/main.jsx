@@ -12,10 +12,13 @@ import Login from './components/Login.jsx'
 import SignUp from './components/SignUp.jsx'
 import Intro from './components/Intro.jsx';
 import VerifyUser from './components/VerifyUser.jsx'
+import BuyItem from './components/BuyItem.jsx'
+import ErrorPage from './components/ErrorPage.jsx'
 
 const router = createBrowserRouter([
   {
-    path: '/', element: <Home />, children: [
+    path: '/', element: <Home />, errorElement: <ErrorPage />,
+     children: [
       {
         path:'/', element: <Intro/>
       },
@@ -31,21 +34,25 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: '/api', element: <App />, children: [
+    path: '/api', element: <App />,  errorElement: <ErrorPage />,
+    children: [
       {
         path: '/api', element: <CardContainer />
       },
       {
         path: '/api/carts', element: <CartContainer />
-      }
+      },
+      {
+        path: '/api/buy-item', element: <BuyItem />
+      },
     ]
   }
 ])
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  
     <Provider store={store}>
       <RouterProvider router={router} />
     </Provider>
-  </StrictMode>,
+
 )

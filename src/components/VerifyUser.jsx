@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { signUp } from '../store/auth';
+import { signUp , authActions} from '../store/auth';
 import { useDispatch, useSelector } from 'react-redux';
+import LoadingSpinner from './LoadingSpinner';
 export default function VerifyUser() {
     const [time] = useState(Math.floor(Date.now() / 1000));
     const [timeLeft, setTimeLeft] = useState('5:00');
@@ -46,25 +47,23 @@ export default function VerifyUser() {
     }
 
     if (response.signUpResponse.success === true) {
-        console.log(response.signUpResponse)
         alert("Success! Please log in.");
         setTimeout(()=>{
           navigate('/signin');
         },0)
+        dispatch(authActions.updateSignUpResponse())
         
 
     }
 
     if (response.signUpResponse.success === false) {
-        return (
-            <h1 className='text-center'>{response.message}</h1>
-        )
+        alert(response.signUpResponse.message);
+        dispatch(authActions.updateSignUpResponse())
     }
 
     if (error.signUpError) {
-        return (
-            <h1 className='text-center'>{error.signUpError}</h1>
-        )
+        alert(error.signUpError);
+        dispatch(authActions.updateSignUpError())
     }
     
 
@@ -79,7 +78,7 @@ export default function VerifyUser() {
             onSubmit={handleSubmit(onSubmit)}
         >
             <div className="mb-4 flex flex-col justify-between relative">
-                <label htmlFor="title" className="text-sm md:text-lg mb-1 md:mb-0 md:mr-2">
+                <label htmlFor="otp" className="text-sm md:text-lg mb-1 md:mb-0 md:mr-2">
                     Enter the OTP sent to your email :{state.email}
                 </label>
                 <input

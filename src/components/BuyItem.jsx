@@ -1,14 +1,17 @@
 import { useRef } from "react";
 import { useForm } from 'react-hook-form';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { BuyItemActions } from "../store/buyItems";
+import LoadingSpinner from "./LoadingSpinner";
 
 
-const BuyPopup = () => {
+const BuyItem = () => {
   const { handleSubmit, register, reset, formState: { errors } } = useForm();
   const formRef = useRef(null);
   const navigate = useNavigate();
-  const { response, isLoading, error } = useSelector(store => store.auth);
+  const dispatch = useDispatch();
+  const { response, isLoading, error } = useSelector(store => store.order);
   const onSubmit = (data) => {    
     console.log(data);
     reset({
@@ -20,10 +23,14 @@ const BuyPopup = () => {
 
   }
 
-  if (response.sendOTPResponse.success === true) {
+  if (response.buyItemResponse.success === true) {
 
       alert("Your order is placed.")
-      navigate('/api')
+      dispatch(BuyItemActions.updateBuyItemResponse());
+      setTimeout(()=>{
+        navigate('/api')
+      },0)
+      
 
     }
 
@@ -33,16 +40,14 @@ const BuyPopup = () => {
       )
     }
 
-    if (response.sendOTPResponse.success === false) {
-      return (
-        <h1 className='text-center'>{response.message}</h1>
-      )
+    if (response.buyItemResponse.success === false) {
+      alert(response.buyItemResponse.message);
+      dispatch(BuyItemActions.updateBuyItemResponse())
     }
 
-    if (error.sendOTPError) {
-      return (
-        <h1 className='text-center'>{error.sendOTPError}</h1>
-      )
+    if (error.buyItemError) {
+      alert(error.buyItemError);
+      dispatch(BuyItemActions.updateBuyItemError())
     }
 
   return (
@@ -52,7 +57,7 @@ const BuyPopup = () => {
         ref={formRef}
         onSubmit={handleSubmit(onSubmit)}
       >
-        <h1 className="flex justify-center items-center md:text-2xl text-xl mb-5 font-bold text-blue-900">Sign Up</h1>
+        <h1 className="flex justify-center items-center md:text-2xl text-xl mb-5 font-bold text-blue-900">Buy Now</h1>
 
         <div className="mt-2 mb-4 flex flex-col md:flex-row md:items-center md:justify-between relative">
           <label htmlFor="title" className="text-sm md:text-lg mb-1 md:mb-0 md:mr-2">
@@ -94,6 +99,7 @@ const BuyPopup = () => {
           </label>
           <input
             type="number"
+            max={5}
             id="quantity"
             name="quantity"
             {...register("quantity", {
@@ -123,8 +129,46 @@ const BuyPopup = () => {
           <span className="text-red-500 md:text-sm text-[12px] absolute top-16 md:top-8 right-0">{errors.Total_amount?.message}</span>
         </div>
 
+        <div className="mt-2 mb-4 flex flex-col md:flex-row md:items-center md:justify-between relative">
+          <label htmlFor="title" className="text-sm md:text-lg mb-1 md:mb-0 md:mr-2">
+            Addresss
+          </label>
+          <input
+            type="text"
+            id="address"
+            placeholder="Enter your address"
+            name="address"
+            {...register("address", {
+              required: "address is required",
+              minLength: { value: 10, message: "Address must atleast 10 characters long" },
+              maxLength: {
+                value: 100, message: "Length of Address cannot exceeds 100 characters."
+              }
+            })}
+            className="flex-1 shadow-xs border border-black/10 focus:outline-blue-400 pl-2 py-1 rounded-md w-full md:w-auto" 
+            
+          />
+          <span className="text-red-500 md:text-sm text-[12px] absolute top-16 md:top-8 right-0">{errors.address?.message}</span>
+        </div>
 
-
+        
+        <div className="mt-2 mb-4 flex flex-col md:flex-row md:items-center md:justify-between relative">
+          <label htmlFor="title" className="text-sm md:text-lg mb-1 md:mb-0 md:mr-2">
+            Payment Mode : 
+          </label>
+          <input
+            type="text"
+            id="address"
+            placeholder="Cash on Delivery"
+            name="payment mode"
+            {...register("payment mode", {
+              required: "payment mode is required",
+            })}
+            className="flex-1 shadow-xs border border-black/10 focus:outline-blue-400 pl-2 py-1 rounded-md w-full md:w-auto" 
+            disabled
+          />
+          <span className="text-red-500 md:text-sm text-[12px] absolute top-16 md:top-8 right-0">{errors.address?.message}</span>
+        </div>
 
         <button
           type="submit"
@@ -138,5 +182,5 @@ const BuyPopup = () => {
   )
 }
 
-export default BuyPopup
+export default BuyItem
 

@@ -2,7 +2,9 @@ import { useRef, useState } from "react";
 import { useForm } from 'react-hook-form';
 import { useSelector,useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {sendOTP} from '../store/auth'
+import {sendOTP,authActions} from '../store/auth'
+import LoadingSpinner from "./LoadingSpinner";
+
 
 
 const SignUp = () => {
@@ -32,6 +34,7 @@ const SignUp = () => {
         })
       })
 
+      dispatch(authActions.updateSendOTPResponse())
 
     }
 
@@ -42,15 +45,13 @@ const SignUp = () => {
     }
 
     if (response.sendOTPResponse.success === false) {
-      return (
-        <h1 className='text-center'>{response.message}</h1>
-      )
+      alert(response.sendOTPResponse.message);
+      dispatch(authActions.updateSendOTPResponse())
     }
 
     if (error.sendOTPError) {
-      return (
-        <h1 className='text-center'>{error.sendOTPError}</h1>
-      )
+      alert(error.sendOTPError);
+      dispatch(authActions.updateSendOTPError())
     }
 
   return (
@@ -63,7 +64,7 @@ const SignUp = () => {
         <h1 className="flex justify-center items-center md:text-2xl text-xl mb-5 font-bold text-blue-900">Sign Up</h1>
 
         <div className="mt-2 mb-4 flex flex-col md:flex-row md:items-center md:justify-between relative">
-          <label htmlFor="title" className="text-sm md:text-lg mb-1 md:mb-0 md:mr-2">
+          <label htmlFor="username" className="text-sm md:text-lg mb-1 md:mb-0 md:mr-2">
             Username :
           </label>
           <input
@@ -84,7 +85,7 @@ const SignUp = () => {
         </div>
 
         <div className="mt-2 mb-4 flex flex-col md:flex-row md:items-center md:justify-between relative">
-          <label htmlFor="title" className="text-sm md:text-lg mb-1 md:mb-0 md:mr-2">
+          <label htmlFor="email" className="text-sm md:text-lg mb-1 md:mb-0 md:mr-2">
             Email :
           </label>
           <input
@@ -105,7 +106,7 @@ const SignUp = () => {
         </div>
 
         <div className="mt-2 mb-4 flex flex-col md:flex-row md:items-center md:justify-between relative">
-          <label htmlFor="title" className="text-sm md:text-lg mb-1 md:mb-0 md:mr-2">
+          <label htmlFor="password" className="text-sm md:text-lg mb-1 md:mb-0 md:mr-2">
             Password :
           </label>
           <input
@@ -126,7 +127,7 @@ const SignUp = () => {
         </div>
 
         <div className="mt-2 mb-4 flex flex-col md:flex-row md:items-center md:justify-between relative">
-          <label htmlFor="title" className="text-sm md:text-lg mb-1 md:mb-0 md:mr-2">
+          <label htmlFor="phone_no" className="text-sm md:text-lg mb-1 md:mb-0 md:mr-2">
             Phone No :
           </label>
           <input

@@ -7,8 +7,8 @@ const Home = () => {
                 <h1 className='text-2xl font-bold'>Shopee</h1>
                 <ul className="pr-7 pt-2">
                     <li className="flex gap-3">
-                        <Link to="/signin"><button className='bg-blue-500 w-20 h-7 rounded-md text-white'>Sign In</button></Link>
-                        <Link to="/signup"><button className='bg-amber-500 w-20 h-7 rounded-md text-white'>Sign Up</button></Link>
+                        <Link to="/signin"><button className='bg-blue-500 w-20 h-7 rounded-md text-white cursor-pointer'>Sign In</button></Link>
+                        <Link to="/signup"><button className='bg-amber-500 w-20 h-7 rounded-md text-white cusror-pointer'>Sign Up</button></Link>
                     </li>
 
                 </ul>

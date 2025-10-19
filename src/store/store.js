@@ -3,6 +3,7 @@ import cartItemSlice from './cartItems';
 import productListSlice from './productList'
 import wishListSlice from './wishtList'
 import authSlice from "./auth";
+import buyItemSlice  from "./buyItems";
 // import { api } from "../middlewares/api";
 // import {logger} from "../middlewares/logger"
 
@@ -11,7 +12,8 @@ const store = configureStore({
         productList:productListSlice.reducer,
         cartItems:cartItemSlice.reducer,
         wishList:wishListSlice.reducer,
-        auth:authSlice.reducer
+        auth:authSlice.reducer,
+        order:buyItemSlice.reducer
         
 
     },

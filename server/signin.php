@@ -1,11 +1,24 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Origin: http://localhost:5173");              
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Content-Type: application/json");
 
 
 include('./connection.php');
+
+require 'vendor/autoload.php';
+
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
+// Load .env
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/');
+$dotenv->load();
+$key = $_ENV['secret'];  
+
+
 $input = json_decode(file_get_contents("php://input"), true);
 if (isset($input['username']) && isset($input['password'])) {
     $username = $input['username'];
@@ -25,10 +38,37 @@ if (isset($input['username']) && isset($input['password'])) {
         // Get the result and check if there’s a match
         $result = mysqli_stmt_get_result($stmt);
         if (mysqli_num_rows($result) > 0 ) {
-            echo json_encode(["success"=>true,"message" => "Sign In successfully.","username"=>$username]);
+            $issuedAt = time();
+            $expire = $issuedAt + 3600; // 1-hour expiry
+
+            $payload = [
+                "iss" => "http://localhost/shopee/server",
+                "aud" => "http://localhost:5173",
+                "iat" => $issuedAt,
+                "exp" => $expire,
+                "data" => ["username" => $username]
+            ];
+
+            $jwt = JWT::encode($payload, $key, 'HS256');
+
+
+            setcookie(
+                "token",
+                $jwt,
+                [
+                    'expires' => $expire,
+                    'path' => 'http://localhost:5173',
+                    'domain' => '', 
+                    'secure' => false, // Set to true in production (HTTPS)
+                    'httponly' => true, // Prevent JavaScript access
+                    'samesite' => 'Lax' // dev 
+                ]
+            );
+
+            echo json_encode(["success"=>true,"message" => "Sign In successfully.","username"=>$username,"token"=>$jwt]);
         } else {
             http_response_code(400); // Set HTTP status to 400 for client error
-            echo json_encode(["error" => "Incorrect Username or Password"]);
+            echo json_encode(["success"=>false,"message" => "Incorrect Username or Password"]);
             exit();
         }
 
@@ -36,7 +76,7 @@ if (isset($input['username']) && isset($input['password'])) {
         mysqli_stmt_close($stmt);
     } else {
         http_response_code(500); // Server error
-        echo json_encode(["error" => "Message could not be processed: " . $e->getMessage()]);
+        echo json_encode(["success"=>false,"error" => "Message could not be processed: " . $e->getMessage()]);
     }
 
     // Close the connection

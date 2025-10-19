@@ -31,7 +31,7 @@ export const signUp = createAsyncThunk(
         })
         const data = await response.json()
         if (!response.ok) {
-            return thunkAPI.rejectWithValue(data.message || "failed to send email");
+            return thunkAPI.rejectWithValue(data.message || "failed to sign up");
         }
         return data;
     } catch (error) {
@@ -45,12 +45,13 @@ export const signIn = createAsyncThunk(
     try{
         const response = await fetch('http://localhost/shopee/server/signin.php',{
             method:'POST',
-           headers: { "Content-Type": 'application/json' },
-            body: JSON.stringify(userData)
+            headers: { "Content-Type": 'application/json' },
+            body: JSON.stringify(userData),
+            
         })
         const data = await response.json()
         if (!response.ok) {
-            return thunkAPI.rejectWithValue(data.message || "failed to send email");
+            return thunkAPI.rejectWithValue(data.message || "failed to sign in");
         }
         return data;
     } catch (error) {
@@ -65,17 +66,19 @@ export const signOut = createAsyncThunk(
         const response = await fetch('http://localhost/shopee/server/signout.php',{
             method:'POST',
            headers: { "Content-Type": 'application/json' },
-            body: JSON.stringify(userData)
+            body: JSON.stringify(userData),
+            credentials:'include'
         })
         const data = await response.json()
         if (!response.ok) {
-            return thunkAPI.rejectWithValue(data.message || "failed to send email");
+            return thunkAPI.rejectWithValue(data.message || "failed to sign out");
         }
         return data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.message);
     }
 })
+
 
 let authResponse ="";
 if(localStorage.getItem("user")){
@@ -91,15 +94,43 @@ const authSlice = createSlice({
             signUpResponse:{},
             signInResponse:authResponse,
             sendOTPResponse:{},
-            signOutResponse:{}
+            signOutResponse:{},
 
         },
         error:{
             signUpError : '',
             signInError : '',
             sendOTPError : '',
-            signOutError: ''
+            signOutError: '',
+
         }
+    },
+    reducers:{
+        updateSignUpResponse(state){
+            state.response.signUpResponse = {}
+        },
+        updateSignInResponse(state){
+            state.response.signInResponse = {}
+        },
+        updateSendOTPResponse(state){
+            state.response.sendOTPResponse = {}
+        },
+        updateSignUpError(state){
+            state.error.signUpError = ""
+        },
+        updateSignInError(state){
+            state.error.signInError = ""
+        },
+        updateSendOTPError(state){
+            state.error.sendOTPError = ""
+        },
+        updateSignOutResponse(state){
+            state.error.signOutResponse = {}
+        },
+        updateSignOutError(state){
+            state.error.signInError = ""
+        }
+
     },
 
     extraReducers:(builder)=>{
@@ -121,7 +152,7 @@ const authSlice = createSlice({
         })
         .addCase(signIn.fulfilled,(state,action)=>{
             state.loading = false;
-            state.error.signUpError='';
+            state.error.signInError='';
             localStorage.setItem('user',JSON.stringify(action.payload))
             state.response.signInResponse = action.payload;
         })
@@ -134,7 +165,7 @@ const authSlice = createSlice({
         })
         .addCase(sendOTP.fulfilled,(state,action)=>{
             state.loading = false;
-            state.error.signUpError='';
+            state.error.sendOTPError='';
             state.response.sendOTPResponse = action.payload;
         })
         .addCase(sendOTP.rejected,(state,action)=>{
@@ -146,8 +177,8 @@ const authSlice = createSlice({
         })
         .addCase(signOut.fulfilled,(state,action)=>{
             state.loading = false;
-            state.error.signUpError='';
-            localStorage.removeItem('user')
+            state.error.signOutError='';
+            localStorage.removeItem('user');
             state.response.signOutResponse = action.payload;
         })
         .addCase(signOut.rejected,(state,action)=>{
@@ -156,7 +187,7 @@ const authSlice = createSlice({
         })
     }
 })
-export const cartItemAction  = authSlice.actions
+export const authActions  = authSlice.actions
 
 
   
