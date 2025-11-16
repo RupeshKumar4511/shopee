@@ -58,7 +58,7 @@ try {
 
     
     //Recipients
-    $mail->setFrom("herosaini67@gmail.com", 'TechUpdate');
+    $mail->setFrom("herosaini67@gmail.com", 'Shopee');
     $mail->addAddress($email, 'Hello Sir/Madam');     // Add a recipient
     
    

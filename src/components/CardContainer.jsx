@@ -1,10 +1,10 @@
+import { useOutletContext } from 'react-router-dom';
 import Card from './Card'
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
 const CardContainer = () => {
-  const productList = useSelector(store=>store.productList.list)
   const loading = useSelector(store=>store.productList.loading);
   const error = useSelector(store=>store.productList.error);
-
+    const { filteredData } = useOutletContext();
   
   if(loading){
     return (<h1 className='text-2xl text-center'>Loading...</h1>)
@@ -15,12 +15,12 @@ const CardContainer = () => {
     )
   }
   return (
-    <div className='flex flex-wrap justify-evenly mx-2 mt-10'>
+    <div className='flex flex-wrap justify-evenly mx-2 mt-10 '>
       {
         
-        productList.map((item)=> <Card key={item.id} id={item.id} title ={item.title} rating={item.rating} image={item.image} price={item.price
-        } />)
+        filteredData.map((item)=> <Card key={item.id} id={item.id} title ={item.title} rating_rate={item.rating_rate} image={item.image} price={item.price} />)
       }
+      
     </div>
   )
 }

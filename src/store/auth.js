@@ -1,6 +1,5 @@
 import {  createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-
 export const sendOTP = createAsyncThunk(
     'auth/send-otp' // action types
     ,async(userData,thunkAPI)=>{

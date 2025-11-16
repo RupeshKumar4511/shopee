@@ -2,23 +2,78 @@
 import {  createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const existingCartIndex = (state,action)=>{
-    return state.findIndex(cart=>cart.productId == action.payload.productId)
+    if(state.length<=0){
+        return -1;
+    }else{
+        return state.findIndex(cart=>cart.productId == action.payload.productId)
+    }
+    
 }
 
+function getUserName(){
+    const user = JSON.parse(localStorage.getItem("user"));
+    return user.username;
+}
 
 export const fetchCartItemsData = createAsyncThunk(
-    'cartItems/fetchCartItem' // action types
+    'cartItems/fetchCartItem'
     ,async()=>{
-    try{
-        const response = await fetch('https://fakestoreapi.com/carts/5')
-        return response.json()
-    }catch(error){
+        try{
+        const response = await fetch('http://localhost/shopee/server/fetchcarts.php',{
+            method:'POST',
+            headers: { "Content-Type": 'application/json' },
+            body: JSON.stringify({user:getUserName()})
+        })
+        const data = await response.json()
+        return data;
+    } catch (error) {
         throw error;
     }
 
 })
 
-// console.log(fetchCartItemsData)
+export const addCartItemsData = createAsyncThunk(
+    'cartItems/addCartItem' 
+    ,async(cartsData,thunkAPI)=>{
+    try{
+        const response = await fetch('http://localhost/shopee/server/addcarts.php',{
+            method:'POST',
+            headers: { "Content-Type": 'application/json' },
+            body: JSON.stringify(cartsData)
+        })
+       const data = await response.json()
+        if (!response.ok) {
+            return thunkAPI.rejectWithValue(data.message || "failed to add cartItem");
+        }
+        return data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+    }
+
+})
+
+
+
+export const deleteCartItemsData = createAsyncThunk(
+    'cartItems/deleteCartItem'
+    ,async(id,thunkAPI)=>{
+    try{
+        const response = await fetch('http://localhost/shopee/server/deletecarts.php',{
+            method:'POST',
+            headers: { "Content-Type": 'application/json' },
+            body: JSON.stringify(id)
+        })
+       const data = await response.json()
+        if (!response.ok) {
+            return thunkAPI.rejectWithValue(data.message || "failed to delete cartItem");
+        }
+        return data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
+    }
+
+})
+
 
 
 const cartItemSlice = createSlice({
@@ -36,7 +91,7 @@ const cartItemSlice = createSlice({
         // loadCartItems:(state,action)=>{
         //     state.loading = false;
         //     state.error='';
-        //     state.list= action.payload.products     
+        //     state.list= action.payload.carts     
         // },
 
         // fetchCartItemsError:(state)=>{
@@ -45,10 +100,11 @@ const cartItemSlice = createSlice({
         // },
 
         addItem:(state,action)=>{       
-            if(existingCartIndex(state.list,action) !==-1){
+            if(existingCartIndex(state.list,action) !== -1){
             state.list[existingCartIndex(state.list,action)].quantity +=1;
             }else{
                 state.list.push({...action.payload,quantity:1})
+                
             } 
             
         },
@@ -58,34 +114,56 @@ const cartItemSlice = createSlice({
             }
         },
         decreaseQuantity:(state,action)=>{
-            console.log("decrease")
-            if(state.list[existingCartIndex(state.list,action)].quantity <= 1){
-                state.list.splice(existingCartIndex(state.list,action),1)
-            }else{
+            
+            if(state.list[existingCartIndex(state.list,action)].quantity > 1){
+               
                state.list[existingCartIndex(state.list,action)].quantity -=1
                 
             }       
         },
         removeItem:(state,action)=>{
-            state.list.splice(existingCartIndex(state.list,action),1);
+            state.list.splice(existingCartIndex(state.list,action),1);  
+            
         }
     },
-    // extraReducers:(builder)=>{
-    //     builder.
-    //     addCase(fetchCartItemsData.pending,(state)=>{
-    //         state.loading = true
-    //     })
-    //     .addCase(fetchCartItemsData.fulfilled,(state,action)=>{
-    //         state.loading = false;
-    //         state.error='';
-    //         console.log(action.payload.products)
-    //         state.list = action.payload.products
-    //     })
-    //     .addCase(fetchCartItemsData.rejected,(state,action)=>{
-    //         state.loading= false;
-    //         state.error = action.payload || "Something went wrong"
-    //     })
-    // }
+    extraReducers:(builder)=>{
+        builder.
+        addCase(fetchCartItemsData.pending,(state)=>{
+            state.loading = true
+        })
+        .addCase(fetchCartItemsData.fulfilled,(state,action)=>{
+            state.loading = false;
+            state.error='';
+            state.list = action.payload.carts;
+            console.log(action.payload.carts)
+        })
+        .addCase(fetchCartItemsData.rejected,(state,action)=>{
+            state.loading= false;
+            state.error = action.payload || "Something went wrong"
+        }). 
+        addCase(addCartItemsData.pending,(state)=>{
+            state.loading = true
+        })
+        .addCase(addCartItemsData.fulfilled,(state)=>{
+            state.loading = false;
+            state.error='';
+        })
+        .addCase(addCartItemsData.rejected,(state,action)=>{
+            state.loading= false;
+            state.error = action.payload || "Something went wrong"
+        }). 
+         addCase(deleteCartItemsData.pending,(state)=>{
+            state.loading = true
+        })
+        .addCase(deleteCartItemsData.fulfilled,(state)=>{
+            state.loading = false;
+            state.error='';
+        })
+        .addCase(deleteCartItemsData.rejected,(state,action)=>{
+            state.loading= false;
+            state.error = action.payload || "Something went wrong"
+        })
+    }
 })
 export const cartItemAction  = cartItemSlice.actions
 

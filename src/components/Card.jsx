@@ -1,13 +1,30 @@
 import { useDispatch } from "react-redux"
-import { cartItemAction } from "../store/cartItems";
+import { addCartItemsData, cartItemAction } from "../store/cartItems";
+import { useNavigate } from "react-router-dom";
 
-const card = ({id,title,image,price,rating}) => {
+const Card = ({id,title,image,price,rating_rate}) => {
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+ 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  function getUserName(){
+    const user = JSON.parse(localStorage.getItem("user"));
+    return user.username;
+  }
   
-  function handleCarts(id,price){
-    dispatch(cartItemAction.addItem({productId:id,price:price}))
+
+  function handleBuy(image,title,price,id){
+    navigate('/api/buy-item',{state:{image,title,price,id}})
+  }
+  
+  function handleCarts(id,price,title){
+    dispatch(cartItemAction.addItem({productId:id,price:price,title:title}));
+    
+    setTimeout(()=>{
+      dispatch(addCartItemsData({productId:id,price:price,title:title,quantity:1,user:getUserName()}));
+    },1000)
+    
   }
   
   return (
@@ -17,14 +34,15 @@ const card = ({id,title,image,price,rating}) => {
         <div className="h-1/2">
           <h3 className='p-2'><b>Title : </b>{title}</h3>
         <p className="flex gap-8 px-3"><span> <b>Price: </b>${price}</span>
-        <span> <b>Rating: </b>{rating.rate}</span></p>
+        <span> <b>Rating: </b>{rating_rate}</span></p>
         <div className="flex">
-          <button className='w-30 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700  mx-3 my-4 cursor-pointer' onClick={()=> handleCarts(id,price)}>Add To Cart</button>
-        <button className='w-30 px-2 py-1 bg-green-500 text-white rounded hover:bg-green-700  mx-3 my-4 cursor-pointer' onClick={()=> console.log("buy now")}>Buy Now</button>
+          <button className='w-30 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700  mx-3 my-4 cursor-pointer' onClick={()=> handleCarts(id,price,title)}>Add To Cart</button>
+        <button className='w-30 px-2 py-1 bg-green-500 text-white rounded hover:bg-green-700  mx-3 my-4 cursor-pointer' onClick={()=>handleBuy(image,title,price,id)}>Buy Now</button>
         </div>
         </div>
       </div>
   )
 }
 
-export default card
+export default Card;
+

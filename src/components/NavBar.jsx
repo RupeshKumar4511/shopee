@@ -7,7 +7,7 @@ import { fetchCartItemsData } from "../store/cartItems";
 import { FaSignOutAlt } from "react-icons/fa";
 import {signOut} from '../store/auth';
 
-const NavBar = () => {
+const NavBar = ({setQuery}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch()
   const [searchData,setSearchData]= useState("");
@@ -17,6 +17,7 @@ const NavBar = () => {
     if(event.key == "Enter"){
       // send request to server for a particular product
       console.log("result : "+ searchData)
+      setQuery(searchData)
     }
   }
 
@@ -68,7 +69,8 @@ const NavBar = () => {
     const username = getUserName()
     dispatch(signOut({username:username}))
     setTimeout(()=>{
-      navigate('/')
+      navigate('/');
+      localStorage.removeItem("user")
     },100)
   }
 
@@ -82,7 +84,7 @@ const NavBar = () => {
         <ul className="pr-7 pt-2 flex">
           <li ><Link to="/api/orders" title="Your orders" className="text-blue-700 relative top-3 right-4 font-bold">Orders </Link></li>
             <li className="flex flex-col gap-0" >
-              <span className="relative pl-1">{cartItems.reduce((accumulator,currentValue)=> accumulator+currentValue.quantity,0)}</span>
+              <span className="relative pl-1">{cartItems?cartItems.reduce((accumulator,currentValue)=> Number(accumulator)+Number(currentValue.quantity),0):0}</span>
               <Link to="/api/carts" title="Your carts"><FaCartShopping size={20} className="cursor-pointer" /></Link>
               
               </li>

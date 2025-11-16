@@ -1,26 +1,43 @@
 /* eslint-disable no-useless-catch */
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+function getUserName(){
+    const user = JSON.parse(localStorage.getItem("user"));
+    return user.username;
+}
 
 export const buyItem = createAsyncThunk(
     'order/buyItem' // action types
-    ,async()=>{
-    try{
-        const response = await fetch('https://fakestoreapi.com/products')
-        return response.json()
-    }catch(error){
-        throw error;
+    ,async(orderData,thunkAPI)=>{
+     try{
+        const response = await fetch('http://localhost/shopee/server/addorder.php',{
+            method:'POST',
+            headers: { "Content-Type": 'application/json' },
+            body: JSON.stringify(orderData)
+        })
+       const data = await response.json()
+        if (!response.ok) {
+            return thunkAPI.rejectWithValue(data.message || "failed to place order");
+        }
+        return data;
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.message);
     }
 
 })
 
 export const fetchOrders = createAsyncThunk(
     'order/fetchOrders' // action types
-    ,async(data)=>{
+    ,async()=>{
     try{
-        const response = await fetch(`https://fakestoreapi.com/products/${data}`)
-        return response.json()
-    }catch(error){
+        const response = await fetch('http://localhost/shopee/server/fetchorders.php',{
+            method:'POST',
+            headers: { "Content-Type": 'application/json' },
+            body: JSON.stringify({user:getUserName()})
+        })
+        const data = await response.json()
+        return data;
+    } catch (error) {
         throw error;
     }
 
@@ -48,7 +65,7 @@ const buyItemSlice = createSlice({
         },
         updateBuyItemResponse:(state)=>{
             state.loading = false;
-            state.error.buyItemError = '';
+            // state.error.buyItemError = '';
             state.response.buyItemResponse={};
             
         },
@@ -62,7 +79,8 @@ const buyItemSlice = createSlice({
             .addCase(buyItem.fulfilled,(state,action)=>{
                 state.loading = false;
                 state.error='';
-                state.list = action.payload
+                console.log(action.payload)
+                state.response.buyItemResponse= action.payload
             })
             .addCase(buyItem.rejected,(state,action)=>{
                 state.loading= false;
@@ -74,7 +92,9 @@ const buyItemSlice = createSlice({
             .addCase(fetchOrders.fulfilled,(state,action)=>{
                 state.loading = false;
                 state.error='';
-                state.list = action.payload
+                state.list = action.payload.orders;
+                console.log(action.payload.orders)
+
             })
             .addCase(fetchOrders.rejected,(state,action)=>{
                 state.loading= false;

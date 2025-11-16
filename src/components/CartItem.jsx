@@ -1,44 +1,19 @@
 import { MdDelete } from "react-icons/md";
 import { useDispatch,useSelector} from "react-redux";
-import {cartItemAction} from '../store/cartItems'
-import { buyItem } from "../store/buyItems";
-import { BuyItemActions } from "../store/buyItems";
+import {cartItemAction, deleteCartItemsData} from '../store/cartItems'
 import { useNavigate } from "react-router-dom";
-import LoadingSpinner from "./LoadingSpinner";
-const CartItem = ({id,title,price,rating,image}) => {
+const CartItem = ({id,title,price,rating_rate,image}) => {
 
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const cartItems = useSelector(store=>store.cartItems.list)
   const handleBuyItem = ()=>{
-    const {response,isLoading,error}= buyItem();
-    if (response.buyItemResponse.success === true) {
+    navigate('/api/buy-item',{state:{image,title,price,id}})
     
-          alert("Your order is placed.")
-          dispatch(BuyItemActions.updateBuyItemResponse());
-          setTimeout(()=>{
-            navigate('/api')
-          },0)
-          
-    
-        }
-    
-        if (isLoading) {
-          return (
-            <LoadingSpinner/>
-          )
-        }
-    
-        if (response.buyItemResponse.success === false) {
-          alert(response.buyItemResponse.message);
-          dispatch(BuyItemActions.updateBuyItemResponse())
-        }
-    
-        if (error.buyItemError) {
-          alert(error.buyItemError);
-          dispatch(BuyItemActions.updateBuyItemError())
-        }
-    
+  }
+  function getUserName(){
+    const user = JSON.parse(localStorage.getItem("user"));
+    return user.username;
   }
   
   return (
@@ -46,7 +21,7 @@ const CartItem = ({id,title,price,rating,image}) => {
         
         <img className='w-15' src={image} alt="cart-image" />
         <h2 className='mx-2 text-wrap flex flex-col w-90'>{title} 
-        <span>{rating.rate} ★ ★ ★ ★</span>
+        <span>{rating_rate} ★ ★ ★ ★</span>
         </h2>
         <p className='mx-14 text-xl w-20'>${price} </p>
         <button className='bg-gray-300 p-2 'onClick={()=>dispatch(cartItemAction.increaseQuantity({productId:id}))}>+</button>
@@ -57,9 +32,11 @@ const CartItem = ({id,title,price,rating,image}) => {
 
         <p className="text-xl mx-20 w-20">${(price * cartItems.filter(cart=>cart.productId == id)[0].quantity).toLocaleString("en-US")}</p>
 
-        <button onClick={()=> {dispatch(cartItemAction.removeItem({productId:id}))}} ><MdDelete className="cursor-pointer"  size={30}/></button>
+        <button title="Delete item" onClick={()=> {
+          dispatch(cartItemAction.removeItem({productId:id}));
+          dispatch(deleteCartItemsData({productId:id,user:getUserName()}))}} ><MdDelete className="cursor-pointer"  size={30}/></button>
 
-        <button className="ml-5 py-2 px-4 bg-blue-600 rounded-md text-white" onClick={()=> {handleBuyItem()}}>Buy Now</button>
+        <button className="ml-5 py-2 px-4 bg-blue-600 rounded-md text-white cursor-pointer" onClick={()=> {handleBuyItem()}}>Buy Now</button>
 
       </div>
   )

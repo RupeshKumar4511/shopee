@@ -6,7 +6,8 @@ export const fetchProductsData = createAsyncThunk(
     'productList/fetchProducts' // action types
     ,async()=>{
     try{
-        const response = await fetch('https://fakestoreapi.com/products')
+        const response = await fetch('http://localhost/shopee/server/products.php');
+        
         return response.json()
     }catch(error){
         throw error;
@@ -14,17 +15,7 @@ export const fetchProductsData = createAsyncThunk(
 
 })
 
-export const fetchSearchedProduct = createAsyncThunk(
-    'productList/fetchSearchedProducts' // action types
-    ,async(data)=>{
-    try{
-        const response = await fetch(`https://fakestoreapi.com/products/${data}`)
-        return response.json()
-    }catch(error){
-        throw error;
-    }
 
-})
 
 const productListSlice = createSlice({
     name:'productList',
@@ -61,21 +52,10 @@ const productListSlice = createSlice({
             .addCase(fetchProductsData.fulfilled,(state,action)=>{
                 state.loading = false;
                 state.error='';
-                state.list = action.payload
+                state.list = action.payload.data
+                console.log(action.payload.data)
             })
             .addCase(fetchProductsData.rejected,(state,action)=>{
-                state.loading= false;
-                state.error = action.payload || "Something went wrong"
-            }).
-            addCase(fetchSearchedProduct.pending,(state)=>{
-                state.loading = true
-            })
-            .addCase(fetchSearchedProduct.fulfilled,(state,action)=>{
-                state.loading = false;
-                state.error='';
-                state.list = action.payload
-            })
-            .addCase(fetchSearchedProduct.rejected,(state,action)=>{
                 state.loading= false;
                 state.error = action.payload || "Something went wrong"
             })
@@ -84,16 +64,28 @@ const productListSlice = createSlice({
 
 
 const getCartItems = ({productList,cartItems})=>{
+    if(productList.list && cartItems.list){
     return cartItems.list.map(({quantity,productId})=>{
       const cartproducts = productList.list.find(product =>product.id === productId)
 
       return {...cartproducts,quantity}
     }).filter(({title})=>title)
+    }
+  }
+
+const getOrderedItems = ({productList,order})=>{
+    if(productList.list && order.list){
+    return order.list.map(({quantity,productId})=>{
+      const orderedproducts = productList.list.find(product =>product.id === productId)
+
+      return {...orderedproducts,quantity}
+    }).filter(({title})=>title)
+    }
   }
 
 
-  
 export const getAllCartItems = createSelector(getCartItems,(state)=>state);
+export const getAllOrderedItems = createSelector(getOrderedItems,(state)=>state);
 
 
 

@@ -14,6 +14,7 @@ import Intro from './components/Intro.jsx';
 import VerifyUser from './components/VerifyUser.jsx'
 import BuyItem from './components/BuyItem.jsx'
 import ErrorPage from './components/ErrorPage.jsx'
+import Orders from './components/orders.jsx'
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,9 @@ const router = createBrowserRouter([
       },
       {
         path: '/api/carts', element: <CartContainer />
+      },
+      {
+        path: '/api/orders', element: <Orders />
       },
       {
         path: '/api/buy-item', element: <BuyItem />
