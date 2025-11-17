@@ -40,6 +40,8 @@ if (isset($input['username']) && isset($input['password'])) {
         if (mysqli_num_rows($result) > 0 ) {
             $issuedAt = time();
             $expire = $issuedAt + 3600; // 1-hour expiry
+            $user_data = $result->fetch_assoc();
+            
 
             $payload = [
                 "iss" => "http://localhost/shopee/server",
@@ -65,7 +67,7 @@ if (isset($input['username']) && isset($input['password'])) {
                 ]
             );
 
-            echo json_encode(["success"=>true,"message" => "Sign In successfully.","username"=>$username,"token"=>$jwt]);
+            echo json_encode(["success"=>true,"message" => "Sign In successfully.","username"=>$username,"email"=>$user_data['Email'],"phone_no"=>$user_data['PhoneNo'],"token"=>$jwt]);
         } else {
             http_response_code(400); // Set HTTP status to 400 for client error
             echo json_encode(["success"=>false,"message" => "Incorrect Username or Password"]);

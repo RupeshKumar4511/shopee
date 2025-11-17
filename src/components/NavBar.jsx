@@ -79,7 +79,7 @@ const NavBar = ({setQuery}) => {
     <nav className='flex justify-between px-8 py-1.5 shadow-md'>
         <h1 className='text-2xl font-bold py-2'>Shopee</h1>
         <div className="text-xl relative top-3"><input type="text" placeholder="Search for products" className="border-1  rounded-md px-2 py-0.5" onKeyDown={(event)=>handleSearch(event)} onChange={(event)=>handleChange(event)}/></div>
-        <div className="text-xl relative top-3">Welcome <span className="text-blue-800">{getUserName()}</span></div>
+        <div className="text-xl relative top-3">Welcome <Link to="/api/profile" className="text-blue-800">{getUserName()}</Link ></div>
         <button title="sign out"><FaSignOutAlt size={20} className="cursor-pointer relative top-1" onClick={()=>{handleSignOut()}}/></button>
         <ul className="pr-7 pt-2 flex">
           <li ><Link to="/api/orders" title="Your orders" className="text-blue-700 relative top-3 right-4 font-bold">Orders </Link></li>
