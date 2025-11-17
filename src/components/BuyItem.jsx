@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector, } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { buyItem, BuyItemActions } from "../store/buyItems";
+import { buyItem, BuyItemActions, fetchOrders } from "../store/buyItems";
 import LoadingSpinner from "./LoadingSpinner";
 
 const BuyItem = () => {
@@ -31,6 +31,7 @@ const BuyItem = () => {
 
     alert("Your order is placed.")
     dispatch(BuyItemActions.updateBuyItemResponse());
+    dispatch(fetchOrders())
     setTimeout(() => {
       navigate('/api')
     }, 0)

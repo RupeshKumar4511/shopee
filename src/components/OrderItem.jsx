@@ -2,7 +2,7 @@ import { useSelector} from "react-redux";
 const OrderItem = ({id,title,price,rating_rate,image}) => {
 
   const orderedItems = useSelector(store=>store.order.list)
-  console.log(orderedItems)
+  
   
   return (
    <div className='my-3 flex flex-row px-2 items-center border-b py-2'>
@@ -17,7 +17,7 @@ const OrderItem = ({id,title,price,rating_rate,image}) => {
 
         <p className="text-xl mx-20 w-20">${(price * orderedItems.filter(order=>order.productId == id)[0].quantity).toLocaleString("en-US")}</p>
 
-        <p className='mx-14 text-xl w-20 text-red-500'>Pending</p>
+        <p className='mx-14 text-xl w-20 text-red-500'>{orderedItems.filter(order=>order.productId == id)[0].status}</p>
 
       </div>
   )
