@@ -15,9 +15,9 @@ const OrderItem = ({id,title,price,rating_rate,image}) => {
         
         <span className='px-4'>{orderedItems.filter(order=>order.productId == id)[0].quantity}</span>
 
-        <p className="text-xl mx-20 w-20">${(price * orderedItems.filter(order=>order.productId == id)[0].quantity).toLocaleString("en-US")}</p>
+        <p className="text-xl mx-28 w-20">${(price * orderedItems.filter(order=>order.productId == id)[0].quantity).toLocaleString("en-US")}</p>
 
-        <p className='mx-14 text-xl w-20 text-red-500'>{orderedItems.filter(order=>order.productId == id)[0].status}</p>
+        <p className=' text-xl w-20 '>{new Date(orderedItems.filter(order=>order.productId == id)[0].Booking_Date).toLocaleDateString()}</p>
 
       </div>
   )
