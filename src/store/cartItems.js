@@ -79,23 +79,23 @@ export const deleteCartItemsData = createAsyncThunk(
 const cartItemSlice = createSlice({
     name:'cartItems',
     initialState:{
-        loading:false,
+        isLoading:false,
         list:[],
         error:''
     },
     reducers:{
 
         // fetchCartItems:(state)=>{
-        //     state.loading = true
+        //     state.isLoading = true
         // },
         // loadCartItems:(state,action)=>{
-        //     state.loading = false;
+        //     state.isLoading = false;
         //     state.error='';
         //     state.list= action.payload.carts     
         // },
 
         // fetchCartItemsError:(state)=>{
-        //     state.loading = false
+        //     state.isLoading = false
         //     state.error = "Something went Wrong"
         // },
 
@@ -129,38 +129,38 @@ const cartItemSlice = createSlice({
     extraReducers:(builder)=>{
         builder.
         addCase(fetchCartItemsData.pending,(state)=>{
-            state.loading = true
+            state.isLoading = true
         })
         .addCase(fetchCartItemsData.fulfilled,(state,action)=>{
-            state.loading = false;
+            state.isLoading = false;
             state.error='';
             state.list = action.payload.carts;
             console.log(action.payload.carts)
         })
         .addCase(fetchCartItemsData.rejected,(state,action)=>{
-            state.loading= false;
+            state.isLoading= false;
             state.error = action.payload || "Something went wrong"
         }). 
         addCase(addCartItemsData.pending,(state)=>{
-            state.loading = true
+            state.isLoading = true
         })
         .addCase(addCartItemsData.fulfilled,(state)=>{
-            state.loading = false;
+            state.isLoading = false;
             state.error='';
         })
         .addCase(addCartItemsData.rejected,(state,action)=>{
-            state.loading= false;
+            state.isLoading= false;
             state.error = action.payload || "Something went wrong"
         }). 
          addCase(deleteCartItemsData.pending,(state)=>{
-            state.loading = true
+            state.isLoading = true
         })
         .addCase(deleteCartItemsData.fulfilled,(state)=>{
-            state.loading = false;
+            state.isLoading = false;
             state.error='';
         })
         .addCase(deleteCartItemsData.rejected,(state,action)=>{
-            state.loading= false;
+            state.isLoading= false;
             state.error = action.payload || "Something went wrong"
         })
     }

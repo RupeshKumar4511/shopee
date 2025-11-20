@@ -11,7 +11,9 @@ export default function Footer() {
                 <li><Link to="/api" >Terms</Link></li>
                 <li><Link to="/api" >Privacy</Link></li>
             </ul>
+            <p className="py-3 text-wrap">Helpline No : 9306141076</p>
             <p className="py-3 text-wrap">&copy; {new Date().getFullYear()}  Rupesh Kumar. All rights reserved.</p>
+
         </footer>
     )
 }

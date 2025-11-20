@@ -18,12 +18,10 @@ const Orders = () => {
 
       </div>
       <div className="border-b"></div>
-      {
-        console.log(orders)
-      }
+      
       {
       
-      orders.map(item => (
+      orders && orders.map(item => (
           <OrderItem
             key={item.id}
             id={item.id}
@@ -34,8 +32,8 @@ const Orders = () => {
           />
         ))}
       <h1 className="text-end mx-20"><b>Total Amount :</b> ${
-          (orders.reduce((acc,curr)=>{
-            return acc+(curr.quantity*curr.price)},0)).toLocaleString("en-US")}</h1>
+          orders ? (orders.reduce((acc,curr)=>{
+            return acc+(curr.quantity*curr.price)},0)).toLocaleString("en-US"):""}</h1>
         
     </div>
   )

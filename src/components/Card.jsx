@@ -1,12 +1,14 @@
 import { useDispatch } from "react-redux"
 import { addCartItemsData, cartItemAction } from "../store/cartItems";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Card = ({id,title,image,price,rating_rate}) => {
 
  
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [change,setChange] = useState('')
 
   function getUserName(){
     const user = JSON.parse(localStorage.getItem("user"));
@@ -20,6 +22,8 @@ const Card = ({id,title,image,price,rating_rate}) => {
   
   function handleCarts(id,price,title){
     dispatch(cartItemAction.addItem({productId:id,price:price,title:title}));
+    setChange("added");
+    
     
     setTimeout(()=>{
       dispatch(addCartItemsData({productId:id,price:price,title:title,quantity:1,user:getUserName()}));
@@ -36,7 +40,8 @@ const Card = ({id,title,image,price,rating_rate}) => {
         <p className="flex gap-8 px-3"><span> <b>Price: </b>${price}</span>
         <span> <b>Rating: </b>{rating_rate}</span></p>
         <div className="flex">
-          <button className='w-30 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700  mx-3 my-4 cursor-pointer' onClick={()=> handleCarts(id,price,title)}>Add To Cart</button>
+          <button className='w-30 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700  mx-3 my-4 cursor-pointer' onClick={()=> handleCarts(id,price,title)}>{change ==='added'?'Added to Cart':'Add to Cart'}</button>
+          
         <button className='w-30 px-2 py-1 bg-green-500 text-white rounded hover:bg-green-700  mx-3 my-4 cursor-pointer' onClick={()=>handleBuy(image,title,price,id)}>Buy Now</button>
         </div>
         </div>

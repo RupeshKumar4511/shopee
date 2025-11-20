@@ -1,7 +1,15 @@
-import { useSelector} from "react-redux";
+import { useSelector,useDispatch} from "react-redux";
+import { BuyItemActions, deleteOrder } from "../store/buyItems";
+import { MdDelete } from "react-icons/md";
+
 const OrderItem = ({id,title,price,rating_rate,image}) => {
 
   const orderedItems = useSelector(store=>store.order.list)
+  const dispatch = useDispatch()
+  function getUserName(){
+    const user = JSON.parse(localStorage.getItem("user"));
+    return user.username;
+  }
   
   
   return (
@@ -17,7 +25,11 @@ const OrderItem = ({id,title,price,rating_rate,image}) => {
 
         <p className="text-xl mx-28 w-20">${(price * orderedItems.filter(order=>order.productId == id)[0].quantity).toLocaleString("en-US")}</p>
 
-        <p className=' text-xl w-20 '>{new Date(orderedItems.filter(order=>order.productId == id)[0].Booking_Date).toLocaleDateString()}</p>
+        <p className=' text-xl w-20 '>{new Date(orderedItems.filter(order=>order.productId == id)[0].Booking_Date).toLocaleDateString('en-GB')}</p>
+
+        <button title="Delete order" className="ml-16" onClick={()=> {
+                  dispatch(BuyItemActions.removeOrder({productId:id}));
+                  dispatch(deleteOrder({productId:id,user:getUserName()}))}} ><MdDelete className="cursor-pointer"  size={30}/></button>
 
       </div>
   )

@@ -88,7 +88,7 @@ if(localStorage.getItem("user")){
 const authSlice = createSlice({
     name:'auth',
     initialState:{
-        loading:false,
+        isLoading:false,
         response:{
             signUpResponse:{},
             signInResponse:authResponse,
@@ -135,53 +135,53 @@ const authSlice = createSlice({
     extraReducers:(builder)=>{
         builder.
         addCase(signUp.pending,(state)=>{
-            state.loading = true;
+            state.isLoading = true;
         })
         .addCase(signUp.fulfilled,(state,action)=>{
-            state.loading = false;
+            state.isLoading = false;
             state.error.signUpError='';
             state.response.signUpResponse = action.payload;
         })
         .addCase(signUp.rejected,(state,action)=>{
-            state.loading= false;
+            state.isLoading= false;
             state.error.signUpError = action.payload || action.error.message || "Something went wrong.";
         }).
         addCase(signIn.pending,(state)=>{
-            state.loading = true
+            state.isLoading = true
         })
         .addCase(signIn.fulfilled,(state,action)=>{
-            state.loading = false;
+            state.isLoading = false;
             state.error.signInError='';
             localStorage.setItem('user',JSON.stringify(action.payload))
             state.response.signInResponse = action.payload;
         })
         .addCase(signIn.rejected,(state,action)=>{
-            state.loading= false;
+            state.isLoading= false;
             state.error.signInError = action.payload || action.error.message || "Something went wrong.";
         }).
         addCase(sendOTP.pending,(state)=>{
-            state.loading = true
+            state.isLoading = true
         })
         .addCase(sendOTP.fulfilled,(state,action)=>{
-            state.loading = false;
+            state.isLoading = false;
             state.error.sendOTPError='';
             state.response.sendOTPResponse = action.payload;
         })
         .addCase(sendOTP.rejected,(state,action)=>{
-            state.loading= false;
+            state.isLoading= false;
             state.error.sendOTPError = action.payload || action.error.message || "Something went wrong.";
         }).
         addCase(signOut.pending,(state)=>{
-            state.loading = true
+            state.isLoading = true
         })
         .addCase(signOut.fulfilled,(state,action)=>{
-            state.loading = false;
+            state.isLoading = false;
             state.error.signOutError='';
             localStorage.removeItem('user');
             state.response.signOutResponse = action.payload;
         })
         .addCase(signOut.rejected,(state,action)=>{
-            state.loading= false;
+            state.isLoading= false;
             state.error.signOutError = action.payload || action.error.message || "Something went wrong.";
         })
     }

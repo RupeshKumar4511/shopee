@@ -27,7 +27,7 @@ try{
             echo json_encode(["success"=>true,"message" => "user created  successfully."]);
         } else {
             http_response_code(400); // Set HTTP status to 400 for client error
-            echo json_encode(["success"=>false,"error" => "something went wrong"]);
+            echo json_encode(["success"=>false,"error" => "Username or email already exist"]);
             exit();
         }
 

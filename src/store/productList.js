@@ -20,7 +20,7 @@ export const fetchProductsData = createAsyncThunk(
 const productListSlice = createSlice({
     name:'productList',
     initialState:{
-        loading:false,
+        isLoading:false,
         list:[],
         error:''
     },
@@ -30,15 +30,15 @@ const productListSlice = createSlice({
       // used in custom action creators 
 
         // fetchProducts:(state)=>{
-        //     state.loading= true;
+        //     state.isLoading= true;
         // },
         // fetchProductsError:(state,action)=>{
-        //     state.loading = false;
+        //     state.isLoading = false;
         //     state.error = action.payload || 'Something went wrong'
 
         // },
         // updateAllProducts:(state,action)=>{
-        //     state.loading = false;
+        //     state.isLoading = false;
         //     state.error = '';
         //     state.list = action.payload
         // },
@@ -47,16 +47,16 @@ const productListSlice = createSlice({
         extraReducers:(builder)=>{
             builder.
             addCase(fetchProductsData.pending,(state)=>{
-                state.loading = true
+                state.isLoading = true
             })
             .addCase(fetchProductsData.fulfilled,(state,action)=>{
-                state.loading = false;
+                state.isLoading = false;
                 state.error='';
                 state.list = action.payload.data
                 console.log(action.payload.data)
             })
             .addCase(fetchProductsData.rejected,(state,action)=>{
-                state.loading= false;
+                state.isLoading= false;
                 state.error = action.payload || "Something went wrong"
             })
         }
