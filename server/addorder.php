@@ -7,38 +7,48 @@ header("Access-Control-Allow-Credentials: true");
 
 include('./connection.php');
 
-try{
-  
+try {
 
-  $input = json_decode(file_get_contents("php://input"), true);
-    if (isset($input['productId']) && isset($input['title']) && isset($input['price']) && isset($input['quantity'])) {
-        // Get form data
-        $productId  = $input['productId'];
-        $title = $input['title'];
-        $price = $input['price'];
-        $quantity = $input['quantity'];
-        $user = $input['user'];
-        
+    $input = json_decode(file_get_contents("php://input"), true);
 
-      
-        $sql = "INSERT INTO `orders` (`productId`, `title`, `price`, `quantity` , `user` ) VALUES ('$productId', '$title','$price','$quantity', '$user');";
+    if (isset($input['productId']) && isset($input['title']) && 
+        isset($input['price']) && isset($input['quantity'])) {
 
-        if (mysqli_query($connection, $sql)) {
-            echo json_encode(["success"=>true,"message" => "order placed successfully."]);
+        $productId = $input['productId'];
+        $title     = $input['title'];
+        $price     = $input['price'];
+        $quantity  = $input['quantity'];
+        $user      = $input['user'];
+
+        // Prepare statement 
+        $stmt = $connection->prepare(
+            "INSERT INTO orders (productId, title, price, quantity, user)
+             VALUES (?, ?, ?, ?, ?)"
+        );
+
+        // bind parameters
+        $stmt->bind_param("isiis", $productId, $title, $price, $quantity, $user);
+
+        if ($stmt->execute()) {
+            echo json_encode([
+                "success" => true,
+                "message" => "Order added successfully."
+            ]);
         } else {
-            http_response_code(400); 
-            echo json_encode(["success"=>false,"error" => "something went wrong"]);
-            exit();
+            http_response_code(400);
+            echo json_encode([
+                "success" => false,
+                "error" => "Database error: " . $stmt->error
+            ]);
         }
 
-        
-        mysqli_close($connection);
+        $stmt->close();
+        $connection->close();
     }
 
-  }catch(Exception $e){
+} catch (Exception $e) {
     http_response_code(500);
     echo json_encode(["error" => "Server Error: " . $e->getMessage()]);
-  }
-  
+}
 
 ?>

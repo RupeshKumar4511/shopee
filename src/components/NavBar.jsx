@@ -3,11 +3,11 @@ import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchProductsData } from "../store/productList";
-import { fetchCartItemsData } from "../store/cartItems";
+import { cartItemAction, fetchCartItemsData } from "../store/cartItems";
 import { FaSignOutAlt } from "react-icons/fa";
 import {signOut} from '../store/auth';
 
-const NavBar = ({setQuery}) => {
+const NavBar = ({setQuery,order}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch()
   const [searchData,setSearchData]= useState("");
@@ -15,7 +15,6 @@ const NavBar = ({setQuery}) => {
 
   function handleSearch(event){
     if(event.key == "Enter"){
-      // send request to server for a particular product
       console.log("result : "+ searchData)
       setQuery(searchData)
     }
@@ -29,8 +28,6 @@ const NavBar = ({setQuery}) => {
     const user = JSON.parse(localStorage.getItem("user"));
     return user.username;
   }
-
-
 
   useEffect(()=>{
 
@@ -74,6 +71,9 @@ const NavBar = ({setQuery}) => {
     },100)
   }
 
+  if(order.place){
+    dispatch(cartItemAction.removeItem({productId:order.productId}));
+  }
 
   return (
     <nav className='flex justify-between px-8 py-1.5 shadow-md'>

@@ -16,6 +16,7 @@ import BuyItem from './components/BuyItem.jsx'
 import ErrorPage from './components/ErrorPage.jsx'
 import Orders from './components/Orders.jsx'
 import Profile from './components/Profile.jsx'
+import FrontCartContainer from './components/FrontCartContainer.jsx'
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,9 @@ const router = createBrowserRouter([
      children: [
       {
         path:'/', element: <Intro/>
+      },
+      {
+        path:'/carts', element: <FrontCartContainer/>
       },
       {
         path: '/signin', element: <Login/>

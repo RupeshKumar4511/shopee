@@ -1,27 +1,20 @@
 import { MdDelete } from "react-icons/md";
 import { useDispatch,useSelector} from "react-redux";
-import {cartItemAction, deleteCartItemsData} from '../store/cartItems'
-import { useNavigate, useOutletContext } from "react-router-dom";
-const CartItem = ({id,title,price,rating_rate,image}) => {
+import {cartItemAction} from '../store/cartItems'
+import { useNavigate } from "react-router-dom";
+const FrontCartItem = ({id,title,price,rating_rate,image}) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector(store=>store.cartItems.list)
-  const { order } = useOutletContext();
 
-  if(order.place === true){
-      
-      dispatch(deleteCartItemsData({productId:order.productId,user:getUserName()}))
-      localStorage.setItem("order",JSON.stringify({"place":false}));
-      
-  }
+ 
   const handleBuyItem = ()=>{
-    navigate('/api/buy-item',{state:{image,title,price,id}})
+    alert("Sign in to buy products")
+    setTimeout(()=>{
+        navigate('/signin')
+    })
     
-  }
-  function getUserName(){
-    const user = JSON.parse(localStorage.getItem("user"));
-    return user.username;
   }
   
   return (
@@ -41,8 +34,7 @@ const CartItem = ({id,title,price,rating_rate,image}) => {
         <p className="text-xl mx-20 w-20">${(price * cartItems.filter(cart=>cart.productId == id)[0].quantity).toLocaleString("en-US")}</p>
 
         <button title="Delete item" onClick={()=> {
-          dispatch(cartItemAction.removeItem({productId:id}));
-          dispatch(deleteCartItemsData({productId:id,user:getUserName()}))}} ><MdDelete className="cursor-pointer"  size={30}/></button>
+          dispatch(cartItemAction.removeItem({productId:id}));}} ><MdDelete className="cursor-pointer"  size={30}/></button>
 
         <button className="ml-5 py-2 px-4 bg-blue-600 rounded-md text-white cursor-pointer" onClick={()=> {handleBuyItem()}}>Buy Now</button>
 
@@ -50,4 +42,4 @@ const CartItem = ({id,title,price,rating_rate,image}) => {
   )
 }
 
-export default CartItem
+export default FrontCartItem

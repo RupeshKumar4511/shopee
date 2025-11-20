@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector, } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 import { buyItem, BuyItemActions, fetchOrders } from "../store/buyItems";
 import LoadingSpinner from "./LoadingSpinner";
 
@@ -13,7 +13,7 @@ const BuyItem = () => {
   const { state: { title, price } } = useLocation();
   const dispatch = useDispatch();
   const { state } = useLocation()
-
+  const { setOrder } = useOutletContext();
 
   function getUserName() {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -30,11 +30,15 @@ const BuyItem = () => {
   if (response.buyItemResponse.success === true) {
 
     alert("Your order is placed.")
-    dispatch(BuyItemActions.updateBuyItemResponse());
-    dispatch(fetchOrders())
+
     setTimeout(() => {
+
+      localStorage.setItem("order", JSON.stringify({ "place": true, productId: state.id }));
+      setOrder(JSON.parse(localStorage.getItem("order")));
+      dispatch(BuyItemActions.updateBuyItemResponse());
+      dispatch(fetchOrders());
       navigate('/api')
-    }, 0)
+    }, 10)
 
 
   }

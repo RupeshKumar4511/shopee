@@ -1,14 +1,14 @@
 import { useSelector } from "react-redux"
-import CartItem from "./CartItem"
 import { getAllCartItems } from "../store/productList"
 import { Link } from "react-router-dom"
+import FrontCartItem from "./FrontCartItem"
 
-const CartContainer = () => {
+const FrontCartContainer = () => {
   const carts = useSelector(getAllCartItems)
   
   return (
     <div className=' w-auto h-auto  mx-8 mt-10 py-4 px-4 min-h-96'>
-      <Link className="bg-black text-white w-10 rounded-md cursor-pointer py-1 px-2" to="/api">Back</Link>
+      <Link className="bg-black text-white w-10 rounded-md cursor-pointer py-1 px-2" to="/">Back</Link>
       <h2 className='text-2xl text-center mb-10 font-bold text-green-600'>Items in Your Cart </h2>
       <div className="flex flex-row"><span className="mx-20 text-xl">Item</span><span className="ml-75 text-xl">Price</span><span className="ml-25 text-xl">Quantity</span> <span className="mx-20 text-xl">Total</span>
       </div>
@@ -16,7 +16,7 @@ const CartContainer = () => {
       {
       
       carts?carts.map(item => (
-          <CartItem
+          <FrontCartItem
             key={item.id}
             id={item.id}
             title={item.title}
@@ -34,4 +34,4 @@ const CartContainer = () => {
   )
 }
 
-export default CartContainer
+export default FrontCartContainer
