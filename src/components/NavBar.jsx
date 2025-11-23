@@ -3,7 +3,7 @@ import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchProductsData } from "../store/productList";
-import { cartItemAction, fetchCartItemsData } from "../store/cartItems";
+import { cartItemAction, deleteCartItemsData, fetchCartItemsData } from "../store/cartItems";
 import { FaSignOutAlt } from "react-icons/fa";
 import {signOut} from '../store/auth';
 
@@ -72,6 +72,7 @@ const NavBar = ({setQuery,order}) => {
   }
 
   if(order.place){
+    dispatch(deleteCartItemsData({productId:order.productId,user:getUserName()}))
     dispatch(cartItemAction.removeItem({productId:order.productId}));
   }
 

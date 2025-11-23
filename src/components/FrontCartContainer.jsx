@@ -5,6 +5,10 @@ import FrontCartItem from "./FrontCartItem"
 
 const FrontCartContainer = () => {
   const carts = useSelector(getAllCartItems)
+
+  if(!carts || carts.length ==0 ){
+    return <Message msg={"Your cart is empty."}/>
+  }
   
   return (
     <div className=' w-auto h-auto  mx-8 mt-10 py-4 px-4 min-h-96'>

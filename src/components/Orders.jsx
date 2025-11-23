@@ -3,10 +3,15 @@ import OrderItem from "./OrderItem";
 
 import { getAllOrderedItems } from "../store/productList"
 import { Link } from "react-router-dom";
+import Message from "./Message";
 
 const Orders = () => {
   
   const orders = useSelector(getAllOrderedItems)
+
+  if(!orders || orders.length ==0 ){
+    return <Message msg={"No orders currently"}/>
+  }
   
   return (
     <div className=' w-auto h-auto  mx-8 mt-10 py-4 px-4 min-h-96'>
@@ -19,6 +24,7 @@ const Orders = () => {
 
       </div>
       <div className="border-b"></div>
+      
       
       {
       

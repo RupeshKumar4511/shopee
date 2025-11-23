@@ -1,20 +1,15 @@
 import { MdDelete } from "react-icons/md";
 import { useDispatch,useSelector} from "react-redux";
 import {cartItemAction, deleteCartItemsData} from '../store/cartItems'
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate,  } from "react-router-dom";
+
 const CartItem = ({id,title,price,rating_rate,image}) => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector(store=>store.cartItems.list)
-  const { order } = useOutletContext();
 
-  if(order.place === true){
-      
-      dispatch(deleteCartItemsData({productId:order.productId,user:getUserName()}))
-      localStorage.setItem("order",JSON.stringify({"place":false}));
-      
-  }
+
   const handleBuyItem = ()=>{
     navigate('/api/buy-item',{state:{image,title,price,id}})
     

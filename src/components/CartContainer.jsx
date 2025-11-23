@@ -2,10 +2,14 @@ import { useSelector } from "react-redux"
 import CartItem from "./CartItem"
 import { getAllCartItems } from "../store/productList"
 import { Link } from "react-router-dom"
+import Message from "./Message"
 
 const CartContainer = () => {
   const carts = useSelector(getAllCartItems)
   
+   if(!carts || carts.length ==0 ){
+    return <Message msg={"Your cart is empty."}/>
+  }
   return (
     <div className=' w-auto h-auto  mx-8 mt-10 py-4 px-4 min-h-96'>
       <Link className="bg-black text-white w-10 rounded-md cursor-pointer py-1 px-2" to="/api">Back</Link>
