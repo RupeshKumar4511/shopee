@@ -1,11 +1,10 @@
 <?php
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Credentials: true");
-
-include('./connection.php');
+require_once __DIR__ . '/cors.php';
+require_once __DIR__ . '/auth.php';
+include __DIR__ . '/connection.php';
+$decoded = verifyJwt();                 
+$user = $decoded->data->id;  
 
 try {
 
@@ -17,8 +16,8 @@ try {
         $productId = $input['productId'];
         $title     = $input['title'];
         $price     = $input['price'];
-        $quantity  = $input['quantity'];
-        $user      = $input['user'];
+        $quantity  = $input['quantity']; 
+
 
         // Prepare statement 
         $stmt = $connection->prepare(

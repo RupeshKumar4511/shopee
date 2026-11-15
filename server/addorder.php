@@ -1,11 +1,10 @@
 <?php
+require_once __DIR__ . '/cors.php';
+require_once __DIR__ . '/auth.php';
+include __DIR__ . '/connection.php';
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Credentials: true");
-
-include('./connection.php');
+$decoded = verifyJwt();                 
+$user = $decoded->data->id;  
 
 try {
 
@@ -13,20 +12,40 @@ try {
 
     if (isset($input['productId']) && isset($input['title']) && 
         isset($input['price']) && isset($input['quantity'])) {
-
         $productId = $input['productId'];
         $title     = $input['title'];
         $price     = $input['price'];
         $quantity  = $input['quantity'];
-        $user      = $input['user'];
 
-        // Prepare statement 
+
+        $stmt1 = $connection->prepare("SELECT `stock` from `products` WHERE `id`=? ");
+        $stmt1->bind_param("i",$productId);
+        $stmt1->execute();
+        $result = $stmt1->get_result();
+        $row = $result->fetch_assoc();    
+        $stmt1->close();
+        if ($row) {
+            $stock = $row['stock'];
+            if($stock== 0){
+                echo json_encode(["success"=>false,"message"=>"Product is out of stock"]);
+                exit();
+            }else if($stock<$quantity){
+                echo json_encode(["success"=>false,"message"=>"Only $stock stocks left"]);
+                exit;
+            }
+        } else {
+            echo json_encode(["msg"=>"Invalid Order"]);
+            exit;
+        }
+        
+
+
         $stmt = $connection->prepare(
             "INSERT INTO orders (productId, title, price, quantity, user)
              VALUES (?, ?, ?, ?, ?)"
         );
 
-        // bind parameters
+      
         $stmt->bind_param("isiis", $productId, $title, $price, $quantity, $user);
 
         if ($stmt->execute()) {

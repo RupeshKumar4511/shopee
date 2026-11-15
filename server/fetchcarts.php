@@ -1,9 +1,14 @@
 <?php
-include('./connection.php');
+require_once __DIR__ . '/cors.php';
+require_once __DIR__ . '/auth.php';
+include __DIR__ . '/connection.php';
 
+$decoded = verifyJwt();                 
+$user = $decoded->data->id;   
+  
 try {
     $input = json_decode(file_get_contents("php://input"), true);
-    $user = $input['user'];
+    
     $sql = "SELECT * FROM `carts` WHERE `user` =  '$user'";
     $result = mysqli_query($connection, $sql);
 

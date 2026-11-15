@@ -1,20 +1,18 @@
 <?php
+require_once __DIR__ . '/cors.php';
+require_once __DIR__ . '/auth.php';
+include __DIR__ . '/connection.php';
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Credentials: true");
-
-include('./connection.php');
+$decoded = verifyJwt();                 
+$user = $decoded->data->id;  
 
 try{
   
 
   $input = json_decode(file_get_contents("php://input"), true);
     if (isset($input['productId'])) {
-        // Get form data
+
         $id  = $input['productId'];
-        $user = $input['user'];
         
 
       
