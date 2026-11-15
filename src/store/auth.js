@@ -46,6 +46,7 @@ export const signIn = createAsyncThunk(
             method:'POST',
             headers: { "Content-Type": 'application/json' },
             body: JSON.stringify(userData),
+            credentials:'include',
             
         })
         const data = await response.json()
@@ -64,7 +65,7 @@ export const signOut = createAsyncThunk(
     try{
         const response = await fetch('http://localhost/shopee/server/signout.php',{
             method:'POST',
-           headers: { "Content-Type": 'application/json' },
+            headers: { "Content-Type": 'application/json' },
             body: JSON.stringify(userData),
             credentials:'include'
         })
@@ -81,7 +82,7 @@ export const signOut = createAsyncThunk(
 
 let authResponse ="";
 if(localStorage.getItem("user")){
-     authResponse = localStorage.getItem("user")
+     authResponse = JSON.parse(localStorage.getItem("user"))
 }else{
     authResponse = {};
 }
@@ -178,6 +179,7 @@ const authSlice = createSlice({
             state.isLoading = false;
             state.error.signOutError='';
             localStorage.removeItem('user');
+            state.response.signInResponse={}
             state.response.signOutResponse = action.payload;
         })
         .addCase(signOut.rejected,(state,action)=>{

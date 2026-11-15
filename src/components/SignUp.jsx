@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import { useForm } from 'react-hook-form';
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {sendOTP,authActions} from '../store/auth'
+import { sendOTP, authActions } from '../store/auth'
 import LoadingSpinner from "./LoadingSpinner";
 
 
@@ -13,8 +13,8 @@ const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { response, isLoading, error } = useSelector(store => store.auth);
-  const [formData ,setFormData] = useState({});
-  const onSubmit = (data) => {    
+  const [formData, setFormData] = useState({});
+  const onSubmit = (data) => {
     dispatch(sendOTP(data));
     setFormData(data);
     reset({
@@ -28,31 +28,26 @@ const SignUp = () => {
 
   if (response.sendOTPResponse.success === true) {
 
-      setTimeout(() => {
-        navigate('/verify-user', {
-          state: formData
-        })
+    setTimeout(() => {
+      navigate('/verify-user', {
+        state: formData
       })
+    })
 
-      dispatch(authActions.updateSendOTPResponse())
+    dispatch(authActions.updateSendOTPResponse())
 
-    }
+  }
 
-    if (isLoading) {
-      return (
-        <LoadingSpinner/>
-      )
-    }
 
-    if (response.sendOTPResponse.success === false) {
-      alert(response.sendOTPResponse.message);
-      dispatch(authActions.updateSendOTPResponse())
-    }
+  if (response.sendOTPResponse.success === false) {
+    alert(response.sendOTPResponse.message);
+    dispatch(authActions.updateSendOTPResponse())
+  }
 
-    if (error.sendOTPError) {
-      alert(error.sendOTPError);
-      dispatch(authActions.updateSendOTPError())
-    }
+  if (error.sendOTPError) {
+    alert(error.sendOTPError);
+    dispatch(authActions.updateSendOTPError())
+  }
 
   return (
     <div className="w-full flex">
@@ -118,7 +113,7 @@ const SignUp = () => {
               required: "password is required",
               minLength: { value: 8, message: "password must atleast 8 characters long" },
               maxLength: {
-                value: 12, message: "Length of password cannot exceeds 12 characters." 
+                value: 12, message: "Length of password cannot exceeds 12 characters."
               }
             })}
             className="flex-1 shadow-xs border border-black/10 focus:outline-blue-400 pl-2 py-1 rounded-md w-full md:w-auto" autoComplete="on"
@@ -150,6 +145,7 @@ const SignUp = () => {
 
 
 
+        {isLoading && <LoadingSpinner />}
         <button
           type="submit"
           className="shadow-md bg-blue-600 px-4 py-2 rounded-md text-white mt-4 hover:bg-blue-700 transition-colors cursor-pointer"

@@ -1,25 +1,42 @@
-import { useSelector } from "react-redux"
-import { getAllCartItems } from "../store/productList"
-import { Link } from "react-router-dom"
-import FrontCartItem from "./FrontCartItem"
+import { useSelector } from "react-redux";
+import { getAllCartItems } from "../store/productList";
+import { Link } from "react-router-dom";
+import FrontCartItem from "./FrontCartItem";
+import Message from './Message.jsx';
 
 const FrontCartContainer = () => {
-  const carts = useSelector(getAllCartItems)
+  const carts = useSelector(getAllCartItems);
 
-  if(!carts || carts.length ==0 ){
-    return <Message msg={"Your cart is empty."}/>
+  if (!carts || carts.length === 0) {
+    return <Message msg={"Your cart is empty."} />;
   }
-  
+
+  const totalAmount = carts
+    .reduce((acc, curr) => acc + curr.quantity * curr.price, 0)
+    .toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
   return (
-    <div className=' w-auto h-auto  mx-8 mt-10 py-4 px-4 min-h-96'>
-      <Link className="bg-black text-white w-10 rounded-md cursor-pointer py-1 px-2" to="/">Back</Link>
-      <h2 className='text-2xl text-center mb-10 font-bold text-green-600'>Items in Your Cart </h2>
-      <div className="flex flex-row"><span className="mx-20 text-xl">Item</span><span className="ml-75 text-xl">Price</span><span className="ml-25 text-xl">Quantity</span> <span className="mx-20 text-xl">Total</span>
+    <div className="max-w-6xl mx-auto px-4 sm:px-8 mt-6 sm:mt-10 py-4 min-h-96">
+      <Link
+        className="inline-block bg-black hover:bg-gray-800 transition-colors text-white text-sm sm:text-base rounded-md cursor-pointer py-1.5 px-4"
+        to="/"
+      >
+        Back
+      </Link>
+
+      <h2 className="text-xl sm:text-2xl md:text-3xl text-center my-6 sm:my-10 font-bold text-green-600">
+        Items in Your Cart
+      </h2>
+
+      <div className="hidden md:grid md:grid-cols-12 gap-4 pb-3 border-b border-gray-300 text-lg font-semibold text-gray-700">
+        <span className="col-span-6 pl-4">Item</span>
+        <span className="col-span-2 text-center">Price</span>
+        <span className="col-span-2 text-center">Quantity</span>
+        <span className="col-span-2 text-right pr-40">Total</span>
       </div>
-      <div className="border-b"></div>
-      {
-      
-      carts?carts.map(item => (
+
+      <div className="divide-y divide-gray-200">
+        {carts.map((item) => (
           <FrontCartItem
             key={item.id}
             id={item.id}
@@ -28,14 +45,17 @@ const FrontCartContainer = () => {
             rating={item.rating_rate}
             image={item.image}
           />
-        )):<h1 className="text-blue-600 ml-96 mt-10 text-2xl font-bold">Your shopee cart is empty.</h1>}
-        {
-          (carts) && <h1 className="text-end mx-20"><b>Total Amount :</b> ${
-          (carts.reduce((acc,curr)=>{
-            return acc+(curr.quantity*curr.price)},0)).toLocaleString("en-US")}</h1>
-        }
-    </div>
-  )
-}
+        ))}
+      </div>
 
-export default FrontCartContainer
+      <div className="mt-8 pt-4 border-t border-gray-300 flex flex-col sm:flex-row justify-between sm:justify-end items-center gap-4">
+        <h3 className="text-lg sm:text-xl text-gray-800">
+          <b>Total Amount:</b>{" "}
+          <span className="text-green-700 font-bold">${totalAmount}</span>
+        </h3>
+      </div>
+    </div>
+  );
+};
+
+export default FrontCartContainer;

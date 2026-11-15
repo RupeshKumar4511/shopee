@@ -20,11 +20,6 @@ const Login = () => {
 
   }
 
-
-  if (isLoading) {
-        return <LoadingSpinner />
-    }
-
     if (response.signInResponse.success === true) {
         setTimeout(()=>{
           navigate('/api');
@@ -92,6 +87,7 @@ const Login = () => {
           <span className="text-red-500 md:text-sm text-[12px] absolute top-16 md:top-8 right-0">{errors.password?.message}</span>
         </div>
 
+        {isLoading && <LoadingSpinner/>}
         <button
           type="submit"
           className="shadow-md bg-blue-600 px-4 py-2 rounded-md text-white mt-4 hover:bg-blue-700 transition-colors cursor-pointer"

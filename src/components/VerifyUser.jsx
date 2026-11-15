@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { signUp , authActions} from '../store/auth';
+import { signUp, authActions } from '../store/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingSpinner from './LoadingSpinner';
 export default function VerifyUser() {
@@ -37,22 +37,20 @@ export default function VerifyUser() {
 
     }, [time])
 
-        const onSubmit = (data) => {
+    const onSubmit = (data) => {
         dispatch(signUp({ otp: data.otp, ...state }))
     }
 
-  
-    if (isLoading) {
-        return <LoadingSpinner />
-    }
+
+
 
     if (response.signUpResponse.success === true) {
         alert("Success! Please log in.");
-        setTimeout(()=>{
-          navigate('/signin');
-        },0)
+        setTimeout(() => {
+            navigate('/signin');
+        }, 0)
         dispatch(authActions.updateSignUpResponse())
-        
+
 
     }
 
@@ -65,7 +63,7 @@ export default function VerifyUser() {
         alert(error.signUpError);
         dispatch(authActions.updateSignUpError())
     }
-    
+
 
 
 
@@ -98,6 +96,9 @@ export default function VerifyUser() {
                 <span className="text-red-500 md:text-sm text-[12px] absolute top-20  right-0">{errors.otp?.message}</span>
             </div>
 
+            {
+                isLoading && <LoadingSpinner />
+            }
 
             <button
                 type="submit"

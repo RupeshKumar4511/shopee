@@ -22,7 +22,8 @@ export const buyItem = createAsyncThunk(
         const response = await fetch('http://localhost/shopee/server/addorder.php',{
             method:'POST',
             headers: { "Content-Type": 'application/json' },
-            body: JSON.stringify(orderData)
+            body: JSON.stringify(orderData),
+            credentials:'include'
         })
        const data = await response.json()
         if (!response.ok) {
@@ -42,7 +43,8 @@ export const fetchOrders = createAsyncThunk(
         const response = await fetch('http://localhost/shopee/server/fetchorders.php',{
             method:'POST',
             headers: { "Content-Type": 'application/json' },
-            body: JSON.stringify({user:getUserName()})
+            body: JSON.stringify({user:getUserName()}),
+            credentials:'include'
         })
         const data = await response.json()
         return data;
@@ -59,7 +61,8 @@ export const deleteOrder = createAsyncThunk(
         const response = await fetch('http://localhost/shopee/server/deleteorder.php',{
             method:'POST',
             headers: { "Content-Type": 'application/json' },
-            body: JSON.stringify(id)
+            body: JSON.stringify(id),
+            credentials:'include'
         })
        const data = await response.json()
         if (!response.ok) {

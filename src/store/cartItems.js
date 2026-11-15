@@ -22,7 +22,8 @@ export const fetchCartItemsData = createAsyncThunk(
             const response = await fetch('http://localhost/shopee/server/fetchcarts.php', {
                 method: 'POST',
                 headers: { "Content-Type": 'application/json' },
-                body: JSON.stringify({ user: getUserName() })
+                body: JSON.stringify({ user: getUserName() }),
+                credentials:'include'
             })
             const data = await response.json()
             return data;
@@ -39,7 +40,8 @@ export const addCartItemsData = createAsyncThunk(
             const response = await fetch('http://localhost/shopee/server/addcarts.php', {
                 method: 'POST',
                 headers: { "Content-Type": 'application/json' },
-                body: JSON.stringify(cartsData)
+                body: JSON.stringify(cartsData),
+                credentials:'include'
             })
             const data = await response.json()
             if (!response.ok) {
@@ -61,7 +63,8 @@ export const deleteCartItemsData = createAsyncThunk(
             const response = await fetch('http://localhost/shopee/server/deletecarts.php', {
                 method: 'POST',
                 headers: { "Content-Type": 'application/json' },
-                body: JSON.stringify(id)
+                body: JSON.stringify(id),
+                credentials:'include'
             })
             const data = await response.json()
             if (!response.ok) {
