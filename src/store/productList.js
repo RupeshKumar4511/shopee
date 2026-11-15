@@ -6,7 +6,7 @@ export const fetchProductsData = createAsyncThunk(
     'productList/fetchProducts' // action types
     ,async()=>{
     try{
-        const response = await fetch('https://shopee-backend.wasmer.app/shopee/server/products.php');
+        const response = await fetch('https://shopee-backend.wasmer.app/products.php');
         
         return response.json()
     }catch(error){
