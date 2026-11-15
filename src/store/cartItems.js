@@ -19,7 +19,7 @@ export const fetchCartItemsData = createAsyncThunk(
     'cartItems/fetchCartItem'
     , async () => {
         try {
-            const response = await fetch('http://localhost/shopee/server/fetchcarts.php', {
+            const response = await fetch('https://shopee-backend.wasmer.app/shopee/server/fetchcarts.php', {
                 method: 'POST',
                 headers: { "Content-Type": 'application/json' },
                 body: JSON.stringify({ user: getUserName() }),
@@ -37,7 +37,7 @@ export const addCartItemsData = createAsyncThunk(
     'cartItems/addCartItem'
     , async (cartsData, thunkAPI) => {
         try {
-            const response = await fetch('http://localhost/shopee/server/addcarts.php', {
+            const response = await fetch('https://shopee-backend.wasmer.app/shopee/server/addcarts.php', {
                 method: 'POST',
                 headers: { "Content-Type": 'application/json' },
                 body: JSON.stringify(cartsData),
@@ -60,7 +60,7 @@ export const deleteCartItemsData = createAsyncThunk(
     'cartItems/deleteCartItem'
     , async (id, thunkAPI) => {
         try {
-            const response = await fetch('http://localhost/shopee/server/deletecarts.php', {
+            const response = await fetch('https://shopee-backend.wasmer.app/shopee/server/deletecarts.php', {
                 method: 'POST',
                 headers: { "Content-Type": 'application/json' },
                 body: JSON.stringify(id),

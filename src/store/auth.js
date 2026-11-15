@@ -4,7 +4,7 @@ export const sendOTP = createAsyncThunk(
     'auth/send-otp' // action types
     ,async(userData,thunkAPI)=>{
     try{
-        const response = await fetch('http://localhost/shopee/server/mail.php',{
+        const response = await fetch('https://shopee-backend.wasmer.app/shopee/server/mail.php',{
             method:'POST',
             headers: { "Content-Type": 'application/json' },
             body: JSON.stringify(userData)
@@ -22,7 +22,7 @@ export const signUp = createAsyncThunk(
     'auth/sign-up' // action types
     ,async(userData,thunkAPI)=>{
     try{
-        const response = await fetch('http://localhost/shopee/server/signup.php',{
+        const response = await fetch('https://shopee-backend.wasmer.app/shopee/server/signup.php',{
             method:'POST',
             headers: { "Content-Type": 'application/json' },
             body: JSON.stringify(userData),
@@ -42,7 +42,7 @@ export const signIn = createAsyncThunk(
     'auth/sign-in' // action types
     ,async(userData,thunkAPI)=>{
     try{
-        const response = await fetch('http://localhost/shopee/server/signin.php',{
+        const response = await fetch('https://shopee-backend.wasmer.app/server/signin.php',{
             method:'POST',
             headers: { "Content-Type": 'application/json' },
             body: JSON.stringify(userData),
@@ -63,7 +63,7 @@ export const signOut = createAsyncThunk(
     'auth/sign-out' // action types
     ,async(userData,thunkAPI)=>{
     try{
-        const response = await fetch('http://localhost/shopee/server/signout.php',{
+        const response = await fetch('https://shopee-backend.wasmer.app/shopee/server/signout.php',{
             method:'POST',
             headers: { "Content-Type": 'application/json' },
             body: JSON.stringify(userData),
