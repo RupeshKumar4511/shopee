@@ -59,7 +59,7 @@ const Card = ({ id, title, image, price, rating_rate }) => {
           
           <div className="flex items-center justify-between text-sm sm:text-base text-gray-700">
             <span>
-              <b>Price: </b>${price}
+              <b>Price: </b>₹{price}
             </span>
             <span>
               <b>Rating: </b>{rating_rate}

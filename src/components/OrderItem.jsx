@@ -64,7 +64,7 @@ const OrderItem = ({ id, title, price, rating_rate, image }) => {
 
       <div className="md:col-span-2 flex justify-between md:justify-center items-center text-sm sm:text-base text-gray-700">
         <span className="md:hidden font-semibold text-gray-500">Price:</span>
-        <span>${price}</span>
+        <span>₹{price}</span>
       </div>
 
       {/* Quantity (1 column on desktop) */}
@@ -75,7 +75,7 @@ const OrderItem = ({ id, title, price, rating_rate, image }) => {
 
       <div className="md:col-span-2 flex justify-between md:justify-center items-center text-sm sm:text-base font-bold text-gray-900">
         <span className="md:hidden font-semibold text-gray-500">Total:</span>
-        <span>${itemTotal}</span>
+        <span>₹{itemTotal}</span>
       </div>
 
       <div className="md:col-span-2 flex justify-between md:justify-center items-center">

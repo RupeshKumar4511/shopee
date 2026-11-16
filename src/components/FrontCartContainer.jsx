@@ -51,7 +51,7 @@ const FrontCartContainer = () => {
       <div className="mt-8 pt-4 border-t border-gray-300 flex flex-col sm:flex-row justify-between sm:justify-end items-center gap-4">
         <h3 className="text-lg sm:text-xl text-gray-800">
           <b>Total Amount:</b>{" "}
-          <span className="text-green-700 font-bold">${totalAmount}</span>
+          <span className="text-green-700 font-bold">₹{totalAmount}</span>
         </h3>
       </div>
     </div>

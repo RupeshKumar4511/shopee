@@ -110,7 +110,7 @@ const BuyItem = () => {
 
         <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-4">
           <label htmlFor="price" className="sm:w-36 text-sm sm:text-base font-bold text-gray-700 shrink-0">
-            Price ($) :
+            Price (₹) :
           </label>
           <input
             type="text"
@@ -156,7 +156,7 @@ const BuyItem = () => {
           <input
             type="text"
             id="Total_amount"
-            value={`$${(newQuantity * price).toFixed(2)}`}
+            value={`₹${(newQuantity * price).toFixed(2)}`}
             disabled
             className="flex-1 bg-gray-50 border border-gray-200 font-bold px-3 py-2 rounded-md w-full text-sm sm:text-base text-blue-600"
           />

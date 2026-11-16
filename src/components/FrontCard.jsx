@@ -41,7 +41,7 @@ const FrontCard = ({ id, title, price, rating_rate, image }) => {
 
           <div className="flex items-center justify-between text-sm sm:text-base text-gray-700">
             <span>
-              <b>Price: </b>${price}
+              <b>Price: </b>₹{price}
             </span>
             <span>
               <b>Rating: </b>{rating_rate}
