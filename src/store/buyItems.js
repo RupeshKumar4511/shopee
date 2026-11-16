@@ -19,7 +19,7 @@ export const buyItem = createAsyncThunk(
     'order/buyItem' // action types
     ,async(orderData,thunkAPI)=>{
      try{
-        const response = await fetch('https://shopee-backend.wasmer.app/shopee/server/addorder.php',{
+        const response = await fetch('https://shopee-backend.wasmer.app/addorder.php',{
             method:'POST',
             headers: { "Content-Type": 'application/json' },
             body: JSON.stringify(orderData),
@@ -40,7 +40,7 @@ export const fetchOrders = createAsyncThunk(
     'order/fetchOrders' // action types
     ,async()=>{
     try{
-        const response = await fetch('https://shopee-backend.wasmer.app/shopee/server/fetchorders.php',{
+        const response = await fetch('https://shopee-backend.wasmer.app/fetchorders.php',{
             method:'POST',
             headers: { "Content-Type": 'application/json' },
             body: JSON.stringify({user:getUserName()}),
@@ -58,7 +58,7 @@ export const deleteOrder = createAsyncThunk(
     'order/deleteOrder'
     ,async(id,thunkAPI)=>{
     try{
-        const response = await fetch('https://shopee-backend.wasmer.app/shopee/server/deleteorder.php',{
+        const response = await fetch('https://shopee-backend.wasmer.app/deleteorder.php',{
             method:'POST',
             headers: { "Content-Type": 'application/json' },
             body: JSON.stringify(id),
