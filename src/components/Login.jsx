@@ -47,18 +47,18 @@ const Login = () => {
 
         <div className="mt-2 mb-4 flex flex-col md:flex-row md:items-center md:justify-between relative">
           <label htmlFor="username" className="text-sm md:text-lg mb-1 md:mb-0 md:mr-2">
-            Username :
+            Email :
           </label>
           <input
             type="text"
             id="username"
-            placeholder="Enter your username"
+            placeholder="Enter your Email"
             name="username"
             {...register("username", {
               required: "username is required",
-              minLength: { value: 3, message: "Username must atleast 3 characters long" },
+              minLength: { value: 8, message: "Username must atleast 8 characters long" },
               maxLength: {
-                value: 32, message: "Length of username cannot exceeds 32 characters."
+                value: 80, message: "Length of username cannot exceeds 32 characters."
               }
             })}
             className="flex-1 shadow-xs border border-black/10 focus:outline-blue-400 pl-2 py-1 rounded-md w-full md:w-auto"
