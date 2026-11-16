@@ -27,7 +27,7 @@ const CardContainer = () => {
     );
   }
 
-  if (!filteredData || filteredData.length === 0) {
+  if (filteredData?.length === 0) {
     return (
       <div className="min-h-80 flex items-center justify-center px-4">
         <h2 className="text-lg sm:text-xl text-gray-600 text-center">

@@ -7,7 +7,7 @@ import Message from "./Message";
 const CartContainer = () => {
   const carts = useSelector(getAllCartItems);
 
-  if (!carts || carts.length === 0) {
+  if (carts?.length === 0) {
     return <Message msg={"Your cart is empty."} />;
   }
 
